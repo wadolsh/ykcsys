@@ -1,0 +1,254 @@
+
+<!DOCTYPE html>
+<html lang="jp" manifest="">
+  <head>
+    <meta charset="utf-8">
+    <title>YKC_SYS</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.1.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="./css/bootstrap-responsive.css" />
+    <link rel="stylesheet" type="text/css" href="../libs/kendo/styles/kendo.common.css" />
+    <link rel="stylesheet" type="text/css" href="../libs/kendo/styles/kendo.default.css" />
+    <link rel="stylesheet" type="text/css" href="./css/ykcsys.css" />
+    
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="./favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="./favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="./favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="./favicon.ico">
+    <link rel="apple-touch-icon-precomposed" href="./favicon.ico">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container" >
+          <a class="brand" href="#">YKS</a>
+	      	<ul class="nav">
+				<li class="active"><a href="#s43_tab" data-toggle="tab">S43</a></li>
+				<li><a href="#Schedule_tab" data-toggle="tab">予定表</a></li>
+				<li><a href="#tool_tab" data-toggle="tab">個人ツール</a></li>
+				<li><a href="#settings_tab" data-toggle="tab">各種設定</a></li>
+			</ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+    	<div class="tab-content">
+    		<div class="row-fluid tab-pane active" id="s43_tab">
+    			<div class="span3">
+		          <div class="well sidebar-nav">
+			    	<!--Sidebar content-->
+			    	<ul class="nav nav-list" id="s43_side_list">
+						<li class="nav-header">구역선택</li>
+						<li><a href="javascript:void(0);">전체표시</a> - <span id="s43_side_tota_count"></span>件</li>
+					</ul>
+		          </div><!--/.well -->
+		        </div><!--/span-->
+		        <div class="span9">
+		        
+			    	<!--Body content-->
+			    	<div class="row-fluid" id="s43_toggle_panel">
+			    		<div class="span4 breadcrumb" id="s43_data_title">横浜市泉区(0101) - X件</div>
+		      			<div class="span8">
+					    	<ul class="breadcrumb" style="text-align: right;">
+					    		<li><a href="javascript:void(0);" id="s43_sync_button">データ取得</a>(<span id="s43_get_date"></span>)<span class="divider">/</span></li>
+								<li><a href="javascript:void(0);" id="s43_view_button">구역카드</a><span class="divider">/</span></li>
+								<li><a href="javascript:void(0);" id="s43_edit_button">편집화면</a><span class="divider">/</span></li>
+								<li><a href="javascript:void(0);" id="s43_map_button">지도화면</a><span class="divider">/</span></li>
+								<li><a href="javascript:void(0);" id="s43_print_button">인쇄화면</a></li>
+							</ul>
+		      			</div>
+			    	</div>
+					
+					<div id="view_mode">
+						<table class="table table-bordered table-condensed table-hover" id="s43_card_list">
+				    		<colgroup>
+				    			<col width="20px">
+				    			<col width="50px">
+				    			<col width="">
+				    			<col width="30px">
+				    			<col width="120px">
+				    			<col width="80px">
+				    			<col width="30px">
+				    			<col width="120px">
+				    			<col width="80px">
+				    		</colgroup>
+				    	</table>
+					</div>
+					<div id="edit_mode">
+						<div id="edit_mode_grid"></div>
+					</div>
+					<br/>
+					<div id="map_mode">
+						<div class="input-append">
+							<input type="text" id="map_address_input" class="span3"/>
+							<button type="button" class="btn " id="map_address_search_button">住所検索</button>
+							<button type="button" class="btn btn-success" id="current_position_button">現在位置</button>
+						</div>
+						<div id="map_canvas" style="width:100%; height:400px"></div>
+					</div>
+    			</div>
+    		</div>
+    		
+    		<!-- 予定表 -->
+			<div class="container-fluid tab-pane" style="padding: 60px 10px;" id="Schedule_tab">
+			</div>
+			
+			<!-- 各種ツール -->
+			<div class="container-fluid tab-pane" style="padding: 60px 10px;" id="tool_tab">
+			</div>
+			
+			<!-- 各種設定 -->
+			<div class="container-fluid tab-pane" style="padding: 60px 10px;" id="settings_tab">
+				<div class="row-fluid">
+					<a class="brand" href="./CSV_to_JSON.htm" target="CSV_to_JSON">CSV_to_JSON</a>
+					<div id="s43csv_input">
+						<textarea rows="20" id="s43csv_input_textarea"></textarea>
+						<button type="submit" class="btn" onclick="s43csvInput();">Submit</button>
+					</div>
+				</div>
+			</div>
+    		
+    	</div>
+
+      <hr>
+
+      <footer>
+        <p>&copy; YKCSYS 2012</p>
+      </footer>
+
+    </div><!--/.fluid-container-->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    
+    	<script type="text/template" id="tpl_s43_card_list">
+        <% _.each(data,function(m){ %>
+             			<tbody>
+			    			<tr>
+			    				<td rowspan="6"><%= m[_id_key] %></td>
+			    				<th rowspan="2">주소</th>
+			    				<td><%= m['住所'] %></td>
+			    				<td></td>
+			    				<th>일시</th>
+			    				<th>봉사자</th>
+			    				<td></td>
+			    				<th>일시</th>
+			    				<th>봉사자</th>
+			    			</tr>
+			    			<tr>
+			    				<td><%= m['住所詳細'] %>  <a href="http://maps.google.com/maps?q=<%= m['住所'] %>">[google]</a></td>
+			    				<td></td>
+			    				<td> / () :</td>
+			    				<td></td>
+			    				<td></td>
+			    				<td> / () :</td>
+			    				<td></td>
+			    			</tr>
+			    			<tr>
+			    				<th>성명</th>
+			    				<td><%= m['名前'] %> <%= m['電話番号'] %></td>
+			    				<td></td>
+			    				<td> / () :</td>
+			    				<td></td>
+			    				<td></td>
+			    				<td> / () :</td>
+			    				<td></td>
+			    			</tr>
+			    			<tr>
+			    				<th rowspan="2">비고</th>
+			    				<td rowspan="2"><%= m['備考'] %></td>
+			    				<td></td>
+			    				<td> / () :</td>
+			    				<td></td>
+			    				<td></td>
+			    				<td> / () :</td>
+			    				<td></td>
+			    			</tr>
+			    			<tr>
+			    				<td></td>
+			    				<td> / () :</td>
+			    				<td></td>
+			    				<td></td>
+			    				<td> / () :</td>
+			    				<td></td>
+			    			</tr>
+<!--
+			    			<tr class="info">
+			    				<th>방문내용</th>
+			    				<td colspan="8"></td>
+			    			</tr>
+-->
+			    		</tbody>
+        <% }); %>
+    </script>
+	<script type="text/template" id="tpl_s43_side_list">
+        <% _.each(data,function(m){ %>
+    				<li class="divider list"></li>
+			<% _.each(m,function(row, key){ %>
+					<li class="list"><a href="javascript:void(0);" data-cardname="<%= row['code1'] %>" data-cardnum="<%= row['code2'] %>"><%= row['name'] %> - <%= row['count'] %>件</a></li>
+			<% }); %>
+    	<% }); %>
+	</script>
+    
+	<script type="text/x-kendo-template" id="s43_kendo_grid_detail">
+                <div class="tabstrip">
+                    <ul>
+                        <li class="k-state-active">
+                            詳細情報
+                        </li>
+                        <li>
+                           最訪問記録
+                        </li>
+                    </ul>
+                    <div>
+                        <div class='details'>
+                            <ul>
+                                <li><label>住所詳細:</label>#= 住所詳細 #</li>
+                                <li><label>名前:</label>#= 名前 #</li>
+                                <li><label>再訪問者:</label></li>
+                                <li><label>該当会衆:</label>#= 該当会衆 #</li>
+                                <li><label>電話番号:</label>#= 電話番号 #</li>
+                                
+                                <li><label>備考:</label>#= 備考 #</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="vistHistory"></div>
+                    </div>
+                </div>
+	</script>
+   
+   <!-- <script src="https://apis.google.com/js/client.js?onload=OnLoadCallback"></script> -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUOR1VV0ff3V9R1iwvwbU5skWD8vmURSI&sensor=true" type="text/javascript"></script>
+   
+<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+<script src="../libs/bootstrap.min.js"></script>
+<script src="../libs/underscore-min.js"></script>
+<script src="../libs/backbone.js"></script>
+<script src="../libs/kendo/js/kendo.web.js"></script>
+<script src="js/util.js"></script>
+<script src="js/s43.js"></script>
+<script type="text/javascript">
+	var s43TabView = new _S43TabView();
+</script>
+
+
+  </body>
+</html>

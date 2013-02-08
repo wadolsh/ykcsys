@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="jp" manifest="">
+  <head>
+    <meta charset="utf-8">
+    <title>YKC_SYS</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+	<title>YKC-SYS</title>
+	
+	<link rel="stylesheet" type="text/css" href="./css/mobile.css" />
+</head>
+<body>
+
+
+<div class="rs-body" flicking="yes">
+    <div class="rs-left">
+        <!-- header -->
+        <div class="rs-header rs-title" position="fixed">
+            헤더 영역 (Left)
+        </div>
+        <!-- //header -->
+        <!-- content(필수) -->
+        <div class="rs-content">
+            <a href="javascript:void(0);" onclick="mapDialog.show();">地図表示</a>
+        </div>
+        <!-- //content(필수) -->
+    </div>
+
+    <div class="rs-main">
+        <div class="jmc-page">
+            <!-- header -->
+            <div class="jmc-header jmc-title" position="fixed">
+                헤더 영역 (Main)
+                <span class="menubtn left" onclick="oRevealSidebarUI.toggleSlide()">메뉴</span>
+                <span class="menubtn right" onclick="oRevealSidebarUI.toggleSlide(true)">메뉴</span>
+            </div>
+            <!-- //header -->
+
+            <!-- ++++++++++++++++++++++++++++++++++++++ Page1 ++++++++++++++++++++++++++++++++++++++ -->
+            <!-- content(필수) -->
+            <div class="jmc-content">
+                    헤더와 풋터를 공통으로 사용하는 상/하단 고정형 플리킹 페이지 입니다. (컨텐츠영역에 들어갈 내용은 이부분에 작성합니다.)
+
+                    <div style="padding:30px">
+                        <p style="color:red;font-size:15pt">1페이지 (페이지 인덱스 번호 : 0)</p><br>
+                        <button onclick="oPageLayoutUI.moveTo(1);return false">2페이지 가기</button>
+                        <button onclick="oPageLayoutUI.moveTo(2);return false">3페이지 가기</button>
+                        <button onclick="oPageLayoutUI.moveTo(3);return false">4페이지 가기</button>
+                        <button onclick="oPageLayoutUI.moveTo(4);return false">5페이지 가기</button>
+                    </div>
+            </div>
+            <!-- //content(필수) -->
+            <!-- content(필수) -->
+            <div class="jmc-content">
+                    헤더와 풋터를 공통으로 사용하는 상/하단 고정형 플리킹 페이지 입니다. (컨텐츠영역에 들어갈 내용은 이부분에 작성합니다.)
+
+                    <div style="padding:30px">
+                        <p style="color:blue;font-size:15pt">2페이지 (페이지 인덱스 번호 : 1)</p><br>
+                        <button onclick="oPageLayoutUI.moveTo(0);return false">1페이지 가기</button>
+                        <button onclick="oPageLayoutUI.moveTo(2);return false">3페이지 가기</button>
+                        <button onclick="oPageLayoutUI.moveTo(3);return false">4페이지 가기</button>
+                        <button onclick="oPageLayoutUI.moveTo(4);return false">5페이지 가기</button>
+                    </div>
+            </div>
+            <!-- //content(필수) -->
+            <!--// ++++++++++++++++++++++++++++++++++++++ Page2 ++++++++++++++++++++++++++++++++++++++ -->
+
+            <!-- ++++++++++++++++++++++++++++++++++++++ Page3 ++++++++++++++++++++++++++++++++++++++ -->
+            <!-- content(필수) -->
+            <div class="jmc-content">
+                    헤더와 풋터를 공통으로 사용하는 상/하단 고정형 플리킹 페이지 입니다. (컨텐츠영역에 들어갈 내용은 이부분에 작성합니다.)
+
+                    <div style="padding:30px">
+                        <p style="color:green;font-size:15pt">3페이지 (페이지 인덱스 번호 : 2)</p><br>
+                        <button onclick="oPageLayoutUI.moveTo(0);return false">1페이지 가기</button>
+                        <button onclick="oPageLayoutUI.moveTo(1);return false">2페이지 가기</button>
+                        <button onclick="oPageLayoutUI.moveTo(3);return false">4페이지 가기</button>
+                        <button onclick="oPageLayoutUI.moveTo(4);return false">5페이지 가기</button>
+                    </div>
+            </div>
+            <!-- //content(필수) -->
+            <!--// ++++++++++++++++++++++++++++++++++++++ Page3 ++++++++++++++++++++++++++++++++++++++ -->
+
+            <!-- ++++++++++++++++++++++++++++++++++++++ Page4 ++++++++++++++++++++++++++++++++++++++ -->
+            <!-- content(필수) -->
+            <div class="jmc-content">
+                    헤더와 풋터를 공통으로 사용하는 상/하단 고정형 플리킹 페이지 입니다. (컨텐츠영역에 들어갈 내용은 이부분에 작성합니다.)
+
+                    <div style="padding:30px">
+                        <p style="color:purple;font-size:15pt">4페이지 (페이지 인덱스 번호 : 3)</p><br>
+                        <button onclick="oPageLayoutUI.moveTo(0);return false">1페이지 가기</button>
+                        <button onclick="oPageLayoutUI.moveTo(1);return false">2페이지 가기</button>
+                        <button onclick="oPageLayoutUI.moveTo(2);return false">3페이지 가기</button>
+                        <button onclick="oPageLayoutUI.moveTo(4);return false">5페이지 가기</button>
+                    </div>
+            </div>
+            <!-- //content(필수) -->
+            <!--// ++++++++++++++++++++++++++++++++++++++ Page4 ++++++++++++++++++++++++++++++++++++++ -->
+
+            <!-- ++++++++++++++++++++++++++++++++++++++ Page5 ++++++++++++++++++++++++++++++++++++++ -->
+            <!-- content(필수) -->
+            <div class="jmc-content">
+
+            </div>
+            <!-- //content(필수) -->
+            <!--// ++++++++++++++++++++++++++++++++++++++ Page5 ++++++++++++++++++++++++++++++++++++++ -->
+
+            <!-- footer -->
+            <div id="mainFooter" class="jmc-footer jmc-title" position="fixed">
+                    풋터 영역입니다.
+            </div>
+            <!-- //footer -->
+        </div>
+    </div>
+
+    <div class="rs-right">
+        <!-- header -->
+        <div class="rs-header rs-title" position="fixed">
+            헤더 영역 (Right)
+        </div>
+        <!-- //header -->
+        <!-- content(필수) -->
+        <div class="rs-content">
+            컨텐츠 영역입니다.<br>컨텐츠 영역입니다.<br>컨텐츠 영역입니다.<br>컨텐츠 영역입니다.<br>컨텐츠 영역입니다.<br>컨텐츠 영역입니다.<br>
+        </div>
+        <!-- //content(필수) -->
+        <!-- footer -->
+        <div class="rs-footer rs-title" position="fixed">
+                풋터 영역입니다.
+        </div>
+        <!-- //footer -->
+    </div>
+</div>
+
+
+<script type="text/template" id="tpl_s43_card_list">
+        <% _.each(data,function(m){ %>
+             			<tbody>
+			    			<tr>
+			    				<td rowspan="6"><%= m['_docId'] %></td>
+			    				<th rowspan="2">주소</th>
+			    				<td><%= m['住所'] %></td>
+			    				<td></td>
+			    				<th>일시</th>
+			    				<th>봉사자</th>
+			    				<td></td>
+			    				<th>일시</th>
+			    				<th>봉사자</th>
+			    			</tr>
+			    			<tr>
+			    				<td><%= m['住所詳細'] %>  <a href="http://maps.google.com/maps?q=<%= m['住所'] %>">[google]</a></td>
+			    				<td></td>
+			    				<td> / () :</td>
+			    				<td></td>
+			    				<td></td>
+			    				<td> / () :</td>
+			    				<td></td>
+			    			</tr>
+			    			<tr>
+			    				<th>성명</th>
+			    				<td><%= m['名前'] %> <%= m['電話番号'] %></td>
+			    				<td></td>
+			    				<td> / () :</td>
+			    				<td></td>
+			    				<td></td>
+			    				<td> / () :</td>
+			    				<td></td>
+			    			</tr>
+			    			<tr>
+			    				<th rowspan="2">비고</th>
+			    				<td rowspan="2"><%= m['備考'] %></td>
+			    				<td></td>
+			    				<td> / () :</td>
+			    				<td></td>
+			    				<td></td>
+			    				<td> / () :</td>
+			    				<td></td>
+			    			</tr>
+			    			<tr>
+			    				<td></td>
+			    				<td> / () :</td>
+			    				<td></td>
+			    				<td></td>
+			    				<td> / () :</td>
+			    				<td></td>
+			    			</tr>
+<!--
+			    			<tr class="info">
+			    				<th>방문내용</th>
+			    				<td colspan="8"></td>
+			    			</tr>
+-->
+			    		</tbody>
+        <% }); %>
+</script>
+
+<script type="text/template" id="tpl_s43_side_list">
+        <% _.each(data,function(m){ %>
+    				<li class="divider list"></li>
+			<% _.each(m,function(row, key){ %>
+					<li class="list"><a href="javascript:void(0);" data-cardname="<%= row['code1'] %>" data-cardnum="<%= row['code2'] %>"><%= row['name'] %> - <%= row['count'] %>件</a></li>
+			<% }); %>
+    	<% }); %>
+</script>
+ 
+ <script type="text/template" id="tpl_s43_edit_mode_row">
+		<% _.each(data,function(m){ %>
+							<tr>
+								<td><%= m['_docId'] %></td>
+								<td><%= m['区域番号']%><%= m['カード番号']%><%= m['枝番号']%></td>
+								<td class="editAddressTd" data-docid="<%= m['_docId'] %>"><%= m['住所']%> <%= m['住所詳細']%>
+									<br/>lat : <span id="geocode_span_lat<%= m['_docId'] %>"><%= m['geocode_lat'] %></span> <input type="hidden" id="geocode_lat<%= m['_docId'] %>" value="<%= m['geocode_lat'] %>" />
+										 lng : <span id="geocode_span_lng<%= m['_docId'] %>"><%= m['geocode_lng'] %></span> <input type="hidden" id="geocode_lng<%= m['_docId'] %>" value="<%= m['geocode_lng'] %>" /></td>
+								<td><%= m['名前']%></td>
+								<td><%= m['電話番号']%></td>
+								<td>
+									<a class="btn btn-small geocoding" href="javascript:void(0);" data-docid="<%= m['_docId'] %>"><i class="icon-map-marker" data-docid="<%= m['_docId'] %>"></i></a>
+									<a class="btn btn-small markerAdd" href="javascript:void(0);" data-docid="<%= m['_docId'] %>"><i class="icon-ok" data-docid="<%= m['_docId'] %>"></i></a>
+								</td>
+							</tr>
+							<tr style="display: none;">
+								<td colspan="7">
+									<div style="width:100%;height:100%;" id="edit_area<%= m['_docId'] %>"><div>
+								</td>
+							</tr>
+							<tr style="display: none;">
+								<td colspan="7">
+									<div style="width:100%;height:100%;" id="geocode_map<%= m['_docId'] %>"><div>
+								</td>
+							</tr>
+		<% }); %>
+</script>
+
+<script type="text/template" id="tpl_s43_map_dialog">
+					<div id="map_mode">
+						<div class="input-append">
+							<input type="text" id="map_address_input" class="span3"/>
+							<button type="button" class="btn " id="map_address_search_button">住所検索</button>
+							<button type="button" class="btn btn-success" id="current_position_button">現在位置</button>
+						</div>
+						<div id="map_canvas" style="width:100%; height:400px"></div>
+					</div>
+</script>
+<script src="//maps.googleapis.com/maps/api/js?key=AIzaSyCUOR1VV0ff3V9R1iwvwbU5skWD8vmURSI&sensor=true" type="text/javascript"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.1/underscore-min.js"></script>
+<script src="//backbonejs.org/backbone.js"></script>
+<script src="../libs/util.js"></script>
+<script src="../libs/s43.js"></script>
+<script src="./js/jindo.mobile.min.ns.js"></script>
+<script src="./js/jindo_mobile_component.min.js"></script>
+<script src="./js/mobile.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+body {
+	margin:0px;
+}
+.menubtn{
+    position:absolute;
+    top:5px;width:40px;
+    border-radius:9em;
+    background:#6e94c9;
+    line-height:20px;color:#FFF;
+    cursor:pointer;text-align:center
+}
+.menubtn.left{left:8px}
+.menubtn.right{right:8px}
+.rs-left,.rs-right{display:none}
+.rs-main{
+    background-color:#FFF;
+    box-shadow:0 0 20px rgba(0,0,0,.6);/* 안쪽 그림자 크기, 색상 수정 */
+    -webkit-box-shadow:0 0 20px rgba(0,0,0,.6)/* 안쪽 그림자 크기, 색상 수정 */
+}
+/* Page */
+.jmc-page{width:100%;border:0;background:#fff}
+/* Header, Footer 영역 CSS */
+.jmc-header,.jmc-footer{display:block;overflow:hidden;position:relative;width:100%;background-color:#000;color:#FFF;outline:0!important}
+/* Title */
+.jmc-title{
+    width:100%;margin:0;padding:10px 0;
+    background:-webkit-gradient(linear, left top, left bottom, from(#4770aa), to(#0b2a55));
+    background:gradient(linear, left top, left bottom, from(#4770aa), to(#0b2a55));
+    text-align:center;white-space:nowrap;text-overflow:ellipsis
+}
+.rs-title{position:relative;width:100%;padding:10px 0;background:#777;text-align:center;white-space:nowrap;text-overflow:ellipsis}
