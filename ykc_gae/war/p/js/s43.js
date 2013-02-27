@@ -304,7 +304,6 @@ var _S43EditModeView = Backbone.View.extend({
 		
 		this.dataSource = new kendo.data.DataSource(meta_s43_dataSource);
 
-		
 		var meta_s43_kendoGrid = JSON.parse(localStorage.getItem('meta_s43_kendoGrid'));
 		meta_s43_kendoGrid['dataSource'] = view.dataSource;
 		meta_s43_kendoGrid['detailTemplate'] = kendo.template($("#s43_kendo_grid_detail").html());
@@ -340,6 +339,16 @@ var _S43EditModeView = Backbone.View.extend({
                 ]
             });
         };
+        meta_s43_kendoGrid['change'] = function() {
+        	// row選択時
+            var selectedRows = this.select();
+            var selectedDataItems = [];
+            for (var i = 0; i < selectedRows.length; i++) {
+                var dataItem = this.dataItem(selectedRows[i]);
+                selectedDataItems.push(dataItem);
+            }
+            // selectedDataItems now contains all selected data records
+         };
         
 	    $('#edit_mode_grid').kendoGrid(meta_s43_kendoGrid);
 	    

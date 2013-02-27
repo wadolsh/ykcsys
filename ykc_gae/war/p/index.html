@@ -217,16 +217,49 @@
                         </li>
                     </ul>
                     <div>
-                        <div class='details'>
-                            <ul>
-                                <li><label>住所詳細:</label>#= 住所詳細 #</li>
-                                <li><label>名前:</label>#= 名前 #</li>
-                                <li><label>再訪問者:</label></li>
-                                <li><label>該当会衆:</label>#= 該当会衆 #</li>
-                                <li><label>電話番号:</label>#= 電話番号 #</li>
-                                
-                                <li><label>備考:</label>#= 備考 #</li>
-                            </ul>
+                        <div class='detail-view'>
+                            <dl>
+								<dt>_id:</dt>
+								<dd>#= _id #</dd>
+								<dt>区域名:</dt>
+								<dd>#= 区域名 #</dd>
+								<dt>区域番号:</dt>
+								<dd>#= 区域番号 #</dd>
+								<dt>カード番号:</dt>
+								<dd>#= カード番号 #</dd>
+								<dt>枝番号:</dt>
+								<dd>#= 枝番号 #</dd>
+
+								<dt>都県名:</dt>
+								<dd>#= 都県名 #</dd>
+								<dt>区市名:</dt>
+								<dd>#= 区市名 #</dd>
+								<dt>町名:</dt>
+								<dd>#= 町名 #</dd>
+								<dt>丁目:</dt>
+								<dd>#= 丁目 #</dd>
+								<dt>番地:</dt>
+								<dd>#= 番地 #</dd>
+								<dt>号:</dt>
+								<dd>#= 号 #</dd>
+                                <dt>住所詳細:</dt>
+								<dd>#= 住所詳細 #</dd>
+
+                                <dt>名前:</dt>
+								<dd>#= 名前 #</dd>
+                                <dt>再訪問者:</dt>
+								<dd></dd>
+                                <dt>該当会衆:</dt>
+								<dd>#= 該当会衆 #</dd>
+                                <dt>電話番号:</dt>
+								<dd>#= 電話番号 #</dd>
+                                <dt>備考:</dt>
+								<dd>#= 備考 #</dd>
+                            </dl>
+							<div class="edit-buttons">
+                				<a class="k-button k-button-icontext k-edit-button" href="\\#"><span class="k-icon k-edit"></span>Edit</a>
+                				<a class="k-button k-button-icontext k-delete-button" href="\\#"><span class="k-icon k-delete"></span>Delete</a>
+            				</div>
                         </div>
                     </div>
                     <div>
@@ -234,7 +267,47 @@
                     </div>
                 </div>
 	</script>
-   
+   	<script type="text/x-kendo-template" id="s43_kendo_grid_detail_edit">
+                <div class="tabstrip">
+                    <ul>
+                        <li class="k-state-active">
+                            詳細情報
+                        </li>
+                        <li>
+                           最訪問記録
+                        </li>
+                    </ul>
+                    <div>
+                        <div class='detail-view'>
+                            <dl>
+								<dd>
+                    				<input type="text" data-bind="value:ProductName" name="ProductName" required="required" validationMessage="required" />
+                    				<span data-for="ProductName" class="k-invalid-msg"></span>
+                				</dd>
+                                <dt>住所詳細:</dt>
+								<dd>#= 住所詳細 #</dd>
+                                <dt>名前:</dt>
+								<dd>#= 名前 #</dd>
+                                <dt>再訪問者:</dt>
+								<dd></dd>
+                                <dt>該当会衆:</dt>
+								<dd>#= 該当会衆 #</dd>
+                                <dt>電話番号:</dt>
+								<dd>#= 電話番号 #</dd>
+                                <dt>備考:</dt>
+								<dd>#= 備考 #</dd>
+                            </dl>
+							<div class="edit-buttons">
+                				<a class="k-button k-button-icontext k-update-button" href="\\#"><span class="k-icon k-update"></span>Save</a>
+                				<a class="k-button k-button-icontext k-cancel-button" href="\\#"><span class="k-icon k-cancel"></span>Cancel</a>
+            				</div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="vistHistory"></div>
+                    </div>
+                </div>
+	</script>
    <!-- <script src="https://apis.google.com/js/client.js?onload=OnLoadCallback"></script> -->
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUOR1VV0ff3V9R1iwvwbU5skWD8vmURSI&sensor=true" type="text/javascript"></script>
    
