@@ -6,6 +6,14 @@ var s43_doc_url = s43_doc_url_base + "?apiKey=" + apiKey;
 var kendo_meta_data_doc_url = mongolab_db_url + "/collections/kendo_meta_data?apiKey=" + apiKey;
 var _id_key = "_id";
 
+function objView(myObj) {
+	var str = "";
+	for (myKey in myObj){
+		str += "■myObj["+myKey +"] = "+ myObj[myKey] + "\n";
+	}
+	alert(str);
+}
+
 
 $.ajaxSetup({
 	url: s43_doc_url,
@@ -211,17 +219,49 @@ var _S43TabView = Backbone.View.extend({
 	},
 	
 	s43viewModeToggle : function(event) {
-		$('#view_mode').toggle('fast', function(a,b,c) {
-
-		});
+		var currentSide = $("#mode_container .current");
+        var thisSide = $("#view_mode");
+        
+        if (currentSide[0] == thisSide[0]) {
+        	return;
+        }
+        
+		currentSide.removeClass("current");
+		thisSide.addClass("current");
+         
+		//$('#edit_mode, #map_mode').removeClass("current");
+		//$('#view_mode').addCalss("current");
+		kendo.fx("#mode_container").flipHorizontal(currentSide, thisSide).play();
 	},
 	
 	s43EditModeToggle : function(event) {
-		$('#edit_mode').toggle();
+		//$('#edit_mode').toggle();
+		
+		var currentSide = $("#mode_container .current");
+        var thisSide = $("#edit_mode");
+        
+        if (currentSide[0] == thisSide[0]) {
+        	return;
+        }
+        
+		currentSide.removeClass("current");
+		thisSide.addClass("current");
+		kendo.fx("#mode_container").flipHorizontal(currentSide, thisSide).play();
 	},
 	
 	s43MapModeToggle : function(event) {
-		$('#map_mode').toggle();
+		//$('#map_mode').toggle();
+		
+		var currentSide = $("#mode_container .current");
+		var thisSide = $("#map_mode");
+		
+        if (currentSide[0] == thisSide[0]) {
+        	return;
+        }
+		
+		currentSide.removeClass("current");
+		thisSide.addClass("current");
+		kendo.fx("#mode_container").flipHorizontal(currentSide, thisSide).play();
 	},
 	
 	s4PrintModeToggle : function() {
@@ -339,16 +379,19 @@ var _S43EditModeView = Backbone.View.extend({
                 ]
             });
         };
-        meta_s43_kendoGrid['change'] = function() {
-        	// row選択時
-            var selectedRows = this.select();
-            var selectedDataItems = [];
-            for (var i = 0; i < selectedRows.length; i++) {
-                var dataItem = this.dataItem(selectedRows[i]);
-                selectedDataItems.push(dataItem);
-            }
-            // selectedDataItems now contains all selected data records
-         };
+        
+        if (!meta_s43_kendoGrid['change']) {
+            meta_s43_kendoGrid['change'] = function() {
+            	// row選択時
+                var selectedRows = this.select();
+                var selectedDataItems = [];
+                for (var i = 0; i < selectedRows.length; i++) {
+                    var dataItem = this.dataItem(selectedRows[i]);
+                    selectedDataItems.push(dataItem);
+                }
+                // selectedDataItems now contains all selected data records
+             };
+        }
         
 	    $('#edit_mode_grid').kendoGrid(meta_s43_kendoGrid);
 	    
