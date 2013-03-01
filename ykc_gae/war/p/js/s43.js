@@ -304,7 +304,7 @@ var _S43EditModeView = Backbone.View.extend({
 		var view = this;
 		
 		var meta_s43_dataSource = JSON.parse(localStorage.getItem('meta_s43_dataSource'));
-		meta_s43_dataSource['transport'] = {
+		/*meta_s43_dataSource['transport'] = {
                 read: function(options) {
                 	options.success(view.model.toJSON());
                 },
@@ -341,7 +341,7 @@ var _S43EditModeView = Backbone.View.extend({
                     }
                 }
             };		
-		
+		*/
 		this.dataSource = new kendo.data.DataSource(meta_s43_dataSource);
 
 		var meta_s43_kendoGrid = JSON.parse(localStorage.getItem('meta_s43_kendoGrid'));
