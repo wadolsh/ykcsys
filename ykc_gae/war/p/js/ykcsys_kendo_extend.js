@@ -1,27 +1,46 @@
 (function($, undefined) {
 	
-
     $.extend(true, kendo.data, {
     	transports: {
             /** ykcsys basic */
             "ykcsys_transport" : kendo.Class.extend({
                 init: function(options) {
-                	alert("init");
-                    this.data = options.data;
+                    this.data = options.view.model.toJSON();
                 },
-
                 read: function(options) {
-                	alert("read");
-                    options.success(this.data);
+                	options.success(this.data);
                 },
                 update: function(options) {
-                    options.success(options.data);
+                	for (var ind in options.data.models) {
+                		var model = options.data.models[ind];
+                    	$.ajax({
+                    		url : this.collections_url + "/" + model[_id_key] + "?apiKey=" + apiKey,
+                    		type: 'PUT',
+                            dataType: "json",
+                            data: JSON.stringify(model),
+                            success: function(result) {
+                                // notify the DataSource that the operation is complete
+                                options.success(result);
+                            },
+                            error: options.error
+                        });
+                	}
+
                 },
-                create: function(options) {
-                    options.success(options.data);
+                destroy: {
+                	url: this.collections_url + "?apiKey=" + apiKey,
+                    type: 'DELETE',
+                    dataType: "json"
                 },
-                destroy: function(options) {
-                    options.success(options.data);
+                create: {
+                	url: this.collections_url + "?apiKey=" + apiKey,
+                    type: 'POST',
+                    dataType: "json"
+                },
+                parameterMap: function(options, operation) {
+                    if (operation !== "read" && options.models) {
+                        return kendo.stringify(options.models);
+                    }
                 }
             })
         }

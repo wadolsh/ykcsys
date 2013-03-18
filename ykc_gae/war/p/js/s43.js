@@ -26,7 +26,7 @@ var side_list_array = {};
 
 var _S43Model = Backbone.Model.extend({
 	idAttribute : _id_key,
-	url : s43_doc_url,
+	url : s43_doc_url_base + "/" + model[_id_key] + "?apiKey=" + apiKey,
 	parse : function(response) {
 		response['住所'] = response['都県名'] + response['区市名'] + response['町名'] + response['丁目']
 						+ (response['番地'] ? "-" + response['番地'] : "") +  (response['号'] ? "-" + response['号'] : "");
