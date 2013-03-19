@@ -1,10 +1,4 @@
-var mongolab_url = "https://api.mongolab.com/api/1";
-var mongolab_db_url = mongolab_url + "/databases/ykcsys";
-var s43_doc_url_base = mongolab_db_url + "/collections/s43";
-var apiKey = "50ee07c6e4b0a0d1d01344f3";
-var s43_doc_url = s43_doc_url_base + "?apiKey=" + apiKey;
-var kendo_meta_data_doc_url = mongolab_db_url + "/collections/kendo_meta_data?apiKey=" + apiKey;
-var _id_key = "_id";
+
 
 function objView(myObj) {
 	var str = "";
@@ -26,7 +20,7 @@ var side_list_array = {};
 
 var _S43Model = Backbone.Model.extend({
 	idAttribute : _id_key,
-	url : s43_doc_url_base + "/" + model[_id_key] + "?apiKey=" + apiKey,
+	url : s43_doc_url_base + "/" + this[_id_key] + "?apiKey=" + apiKey,
 	parse : function(response) {
 		response['住所'] = response['都県名'] + response['区市名'] + response['町名'] + response['丁目']
 						+ (response['番地'] ? "-" + response['番地'] : "") +  (response['号'] ? "-" + response['号'] : "");
@@ -342,12 +336,18 @@ var _S43EditModeView = Backbone.View.extend({
                 }
             };		
 		*/
+		
+		meta_s43_dataSource.data = this.model;
 		this.dataSource = new kendo.data.DataSource(meta_s43_dataSource);
-
-		var meta_s43_kendoGrid = JSON.parse(localStorage.getItem('meta_s43_kendoGrid'));
-		meta_s43_kendoGrid['dataSource'] = view.dataSource;
-		meta_s43_kendoGrid['detailTemplate'] = kendo.template($("#s43_kendo_grid_detail").html());
-		meta_s43_kendoGrid['detailInit'] = function(e) {
+		
+		
+		this.meta_s43_kendoGrid = JSON.parse(localStorage.getItem('meta_s43_kendoGrid'));
+		this.meta_s43_kendoGrid['template'] = kendo.template($("#s43_kendo_grid_detail").html());
+		this.meta_s43_kendoGrid['editTemplate'] = kendo.template($("#s43_kendo_grid_detail_edit").html());
+		this.meta_s43_kendoGrid['dataSource'] = this.dataSource;
+		//this.meta_s43_kendoGrid['detailTemplate'] = kendo.template($("#s43_kendo_grid_detail").html());
+		/*
+		this.meta_s43_kendoGrid['detailInit'] = function(e) {
             var detailRow = e.detailRow;
 
             detailRow.find(".tabstrip").kendoTabStrip({
@@ -355,7 +355,6 @@ var _S43EditModeView = Backbone.View.extend({
                     open: { effects: "fadeIn" }
                 }
             });
-
             detailRow.find(".vistHistory").kendoGrid({
                 dataSource: {
                     type: "odata",
@@ -379,9 +378,8 @@ var _S43EditModeView = Backbone.View.extend({
                 ]
             });
         };
-        
-        if (!meta_s43_kendoGrid['change']) {
-            meta_s43_kendoGrid['change'] = function() {
+        if (!this.meta_s43_kendoGrid['change']) {
+        	this.meta_s43_kendoGrid['change'] = function() {
             	// row選択時
                 var selectedRows = this.select();
                 var selectedDataItems = [];
@@ -392,19 +390,23 @@ var _S43EditModeView = Backbone.View.extend({
                 // selectedDataItems now contains all selected data records
              };
         }
+        */
         
-	    $('#edit_mode_grid').kendoGrid(meta_s43_kendoGrid);
-	    
+	    //$('#edit_mode_grid').kendoGrid(this.meta_s43_kendoGrid);
+		var listView = $('#edit_mode_grid').kendoListView(this.meta_s43_kendoGrid).data("kendoListView");
+		$(".k-add-button").click(function(e) {
+            listView.add();
+            e.preventDefault();
+        });
+		
+		
 		this.model.on('reset', this.render, this);
 		//this.render();
 	},
 	
 	render : function() {
-		
-		this.dataSource.read();
-
-		
-		
+		// データ投入
+		this.dataSource.read(this.model.toJSON());
 		
 		/*
 		var html1 = _.template($('#tpl_s43_card_list').html(), {

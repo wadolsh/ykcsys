@@ -14,7 +14,7 @@ body {
 .detail-view
 {
     float: left;
-    width: 320px;
+    width: 500px;
     margin: 5px;
     padding: 3px;
     -moz-box-shadow: inset 0 0 50px rgba(0,0,0,0.1);

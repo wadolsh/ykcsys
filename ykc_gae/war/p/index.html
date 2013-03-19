@@ -92,6 +92,9 @@
 					</div>
 					
 					<div id="edit_mode" class="side current ">
+						<div class="k-toolbar k-grid-toolbar">
+					        <a class="k-button k-button-icontext k-add-button" href="#"><span class="k-icon k-add"></span>Add new record</a>
+					    </div>
 						<div id="edit_mode_grid"></div>
 					</div>
 					
@@ -211,16 +214,6 @@
 	</script>
     
 	<script type="text/x-kendo-template" id="s43_kendo_grid_detail">
-                <div class="tabstrip">
-                    <ul>
-                        <li class="k-state-active">
-                            詳細情報
-                        </li>
-                        <li>
-                           最訪問記録
-                        </li>
-                    </ul>
-                    <div>
                         <div class='detail-view'>
                             <dl>
 								#for(key in data.fields) {#
@@ -233,56 +226,27 @@
                 				<a class="k-button k-button-icontext k-delete-button" href="\\#"><span class="k-icon k-delete"></span>Delete</a>
             				</div>
                         </div>
-                    </div>
-                    <div>
-                        <div class="vistHistory"></div>
-                    </div>
-                </div>
 	</script>
    	<script type="text/x-kendo-template" id="s43_kendo_grid_detail_edit">
-                <div class="tabstrip">
-                    <ul>
-                        <li class="k-state-active">
-                            詳細情報
-                        </li>
-                        <li>
-                           最訪問記録
-                        </li>
-                    </ul>
-                    <div>
                         <div class='detail-view'>
                             <dl>
+								#for(key in data.fields) {#
+								<dt>#= key #:</dt>
 								<dd>
-                    				<input type="text" data-bind="value:ProductName" name="ProductName" required="required" validationMessage="required" />
-                    				<span data-for="ProductName" class="k-invalid-msg"></span>
-                				</dd>
-                                <dt>住所詳細:</dt>
-								<dd>#= 住所詳細 #</dd>
-                                <dt>名前:</dt>
-								<dd>#= 名前 #</dd>
-                                <dt>再訪問者:</dt>
-								<dd></dd>
-                                <dt>該当会衆:</dt>
-								<dd>#= 該当会衆 #</dd>
-                                <dt>電話番号:</dt>
-								<dd>#= 電話番号 #</dd>
-                                <dt>備考:</dt>
-								<dd>#= 備考 #</dd>
+									<input type="text" data-bind="value:#= key #" name="#= key #"  validationMessage="required" />
+									<span data-for="#= key #" class="k-invalid-msg"></span>
+								</dd>
+								#}#
                             </dl>
-							<div class="edit-buttons">
+            				<div class="edit-buttons">
                 				<a class="k-button k-button-icontext k-update-button" href="\\#"><span class="k-icon k-update"></span>Save</a>
                 				<a class="k-button k-button-icontext k-cancel-button" href="\\#"><span class="k-icon k-cancel"></span>Cancel</a>
             				</div>
                         </div>
-                    </div>
-                    <div>
-                        <div class="vistHistory"></div>
-                    </div>
-                </div>
 	</script>
    <!-- <script src="https://apis.google.com/js/client.js?onload=OnLoadCallback"></script> -->
+<script src="js/vars.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUOR1VV0ff3V9R1iwvwbU5skWD8vmURSI&sensor=true" type="text/javascript"></script>
-   
 <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
 <script src="../libs/bootstrap.min.js"></script>
 <script src="../libs/underscore-min.js"></script>

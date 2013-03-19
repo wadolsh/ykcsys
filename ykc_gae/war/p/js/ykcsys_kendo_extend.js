@@ -5,16 +5,18 @@
             /** ykcsys basic */
             "ykcsys_transport" : kendo.Class.extend({
                 init: function(options) {
-                    this.data = options.view.model.toJSON();
+                	// backbone collection
+                	this.data = options.data;
                 },
                 read: function(options) {
-                	options.success(this.data);
+                	options.success(this.data.toJSON());
                 },
                 update: function(options) {
-                	for (var ind in options.data.models) {
-                		var model = options.data.models[ind];
+                	//for (var ind in options.data.models) {
+                		var model = options.data;
+                		var that = this;
                     	$.ajax({
-                    		url : this.collections_url + "/" + model[_id_key] + "?apiKey=" + apiKey,
+                    		url : that.collections_url + "/" + model[_id_key] + "?apiKey=" + apiKey,
                     		type: 'PUT',
                             dataType: "json",
                             data: JSON.stringify(model),
@@ -24,17 +26,20 @@
                             },
                             error: options.error
                         });
-                	}
-
+                	//}
                 },
                 destroy: {
-                	url: this.collections_url + "?apiKey=" + apiKey,
-                    type: 'DELETE',
+                	url: function(params) {
+            			return this.collections_url + "?apiKey=" + apiKey;
+            		},
+                    //type: 'DELETE',
                     dataType: "json"
                 },
                 create: {
-                	url: this.collections_url + "?apiKey=" + apiKey,
-                    type: 'POST',
+                	url: function(params) {
+            			return this.collections_url + "?apiKey=" + apiKey;
+            		},
+                    //type: 'POST',
                     dataType: "json"
                 },
                 parameterMap: function(options, operation) {
