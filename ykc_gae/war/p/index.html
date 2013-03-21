@@ -65,7 +65,7 @@
 			    		<div class="span4 breadcrumb" id="s43_data_title">横浜市泉区(0101) - X件</div>
 		      			<div class="span8">
 					    	<ul class="breadcrumb" style="text-align: right;">
-					    		<li><a href="javascript:void(0);" id="s43_sync_button">データ取得</a>(<span id="s43_get_date"></span>)<span class="divider">/</span></li>
+					    		<li><a href="javascript:void(0);" id="s43_sync_button" title="서버에서 구역 데이터를 가져 옵니다.">구역데이터 취득</a>(<span id="s43_get_date"></span>)<span class="divider">/</span></li>
 								<li><a href="javascript:void(0);" id="s43_view_button">구역카드</a><span class="divider">/</span></li>
 								<li><a href="javascript:void(0);" id="s43_edit_button">편집화면</a><span class="divider">/</span></li>
 								<li><a href="javascript:void(0);" id="s43_map_button">지도화면</a><span class="divider">/</span></li>
@@ -161,38 +161,38 @@
 			    			<tr>
 			    				<td><%= m['住所詳細'] %>  <a href="http://maps.google.com/maps?q=<%= m['住所'] %>">[google]</a></td>
 			    				<td></td>
-			    				<td> / () :</td>
+			    				<td class="toolTip"> / () :</td>
 			    				<td></td>
 			    				<td></td>
-			    				<td> / () :</td>
+			    				<td class="toolTip"> / () :</td>
 			    				<td></td>
 			    			</tr>
 			    			<tr>
 			    				<th>성명</th>
 			    				<td><%= m['名前'] %> <%= m['電話番号'] %></td>
 			    				<td></td>
-			    				<td> / () :</td>
+			    				<td class="toolTip"> / () :</td>
 			    				<td></td>
 			    				<td></td>
-			    				<td> / () :</td>
+			    				<td class="toolTip"> / () :</td>
 			    				<td></td>
 			    			</tr>
 			    			<tr>
 			    				<th rowspan="2">비고</th>
 			    				<td rowspan="2"><%= m['備考'] %></td>
 			    				<td></td>
-			    				<td> / () :</td>
+			    				<td class="toolTip"> / () :</td>
 			    				<td></td>
 			    				<td></td>
-			    				<td> / () :</td>
+			    				<td class="toolTip"> / () :</td>
 			    				<td></td>
 			    			</tr>
 			    			<tr>
 			    				<td></td>
-			    				<td> / () :</td>
+			    				<td class="toolTip"> / () :</td>
 			    				<td></td>
 			    				<td></td>
-			    				<td> / () :</td>
+			    				<td class="toolTip"> / () :</td>
 			    				<td></td>
 			    			</tr>
 <!--
@@ -204,7 +204,24 @@
 			    		</tbody>
         <% }); %>
     </script>
-	<script type="text/template" id="tpl_s43_side_list">
+    <script type="text/template" id="tpl_visit_history_input">
+		<div>
+			<br/>
+			<select id="meetType" style="width: 45px">
+				<option>〇</option>
+				<option>×</option>
+				<option>△</option>
+			</select>
+			<input id="datepicker" value="10/10/2011" style="width:150px;" />
+			<input id="timepicker" value="10:00 AM" />
+			<br/>
+			備考：<textarea id="contents" value=""/>
+			<br/>
+			<button id="submit" class="k-button" style="width: 200px">登録</button>
+		</div>
+    </script>
+    
+	<script type="text/x-kendo-template" id="tpl_s43_side_list">
         <% _.each(data,function(m){ %>
     				<li class="divider list"></li>
 			<% _.each(m,function(row, key){ %>
@@ -214,34 +231,36 @@
 	</script>
     
 	<script type="text/x-kendo-template" id="s43_kendo_grid_detail">
-                        <div class='detail-view'>
+                        <div class='detail-view k-widget'>
+							<div class="edit-buttons">
+                				<a class="k-button k-button-icontext k-edit-button" href="\\#"><span class="k-icon k-edit"></span></a>
+            				</div>
                             <dl>
 								#for(key in data.fields) {#
 								<dt>#= key #:</dt>
 								<dd>#= data[key] ? data[key] : "" #</dd>
 								#}#
                             </dl>
-							<div class="edit-buttons">
-                				<a class="k-button k-button-icontext k-edit-button" href="\\#"><span class="k-icon k-edit"></span>Edit</a>
-                				<a class="k-button k-button-icontext k-delete-button" href="\\#"><span class="k-icon k-delete"></span>Delete</a>
-            				</div>
                         </div>
 	</script>
    	<script type="text/x-kendo-template" id="s43_kendo_grid_detail_edit">
-                        <div class='detail-view'>
+                        <div class='detail-view k-widget'>
+            				<div class="edit-buttons">
+                				<a class="k-button k-button-icontext k-update-button" href="\\#"><span class="k-icon k-update" title="サーバーに修正内容を反映します。"></span></a>
+                				<a class="k-button k-button-icontext k-cancel-button" href="\\#"><span class="k-icon k-cancel" title="修正をキャンセルします。"></span></a>
+								&nbsp;&nbsp;&nbsp;&nbsp;
+                				<a class="k-button k-button-icontext k-delete-button" href="\\#"><span class="k-icon k-delete" title="サーバーから即時削除になります。"></span></a>
+            				</div>
                             <dl>
 								#for(key in data.fields) {#
+								#var field = data.fields[key]#
 								<dt>#= key #:</dt>
 								<dd>
-									<input type="text" data-bind="value:#= key #" name="#= key #"  validationMessage="required" />
+									<input type="text" class="k-input" data-bind="value:#= key #" name="#= key #"  #= field['editable'] == false ? "disabled" : "" #             validationMessage="required" />
 									<span data-for="#= key #" class="k-invalid-msg"></span>
 								</dd>
 								#}#
                             </dl>
-            				<div class="edit-buttons">
-                				<a class="k-button k-button-icontext k-update-button" href="\\#"><span class="k-icon k-update"></span>Save</a>
-                				<a class="k-button k-button-icontext k-cancel-button" href="\\#"><span class="k-icon k-cancel"></span>Cancel</a>
-            				</div>
                         </div>
 	</script>
    <!-- <script src="https://apis.google.com/js/client.js?onload=OnLoadCallback"></script> -->
@@ -249,7 +268,7 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUOR1VV0ff3V9R1iwvwbU5skWD8vmURSI&sensor=true" type="text/javascript"></script>
 <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
 <script src="../libs/bootstrap.min.js"></script>
-<script src="../libs/underscore-min.js"></script>
+<script src="../libs/underscore.js"></script>
 <script src="../libs/backbone.js"></script>
 <script src="../libs/kendo/js/kendo.web.js"></script>
 <script src="js/ykcsys_kendo_extend.js"></script>

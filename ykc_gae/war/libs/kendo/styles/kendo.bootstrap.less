@@ -1,6 +1,6 @@
 /*
-* Kendo UI Web v2012.3.1114 (http://kendoui.com)
-* Copyright 2012 Telerik AD. All rights reserved.
+* Kendo UI Web v2013.1.319 (http://kendoui.com)
+* Copyright 2013 Telerik AD. All rights reserved.
 *
 * Kendo UI Web commercial licenses may be obtained at
 * https://www.kendoui.com/purchase/license-agreement/kendo-ui-web-commercial.aspx
@@ -10,6 +10,7 @@
 */
 @image-folder: "Bootstrap";
 @texture: none;
+@tooltip-texture: none;
 @fallback-texture: url('textures/highlight.png');
 
 /* Widget Base Styles */
@@ -57,6 +58,11 @@
 @hover-border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 @hover-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
 
+/*Focused State*/
+@focused-border-color: @hover-border-color;
+@focused-shadow: 0 0 3px 0 @shadow-color;
+@focused-item-shadow: inset 0 0 3px 1px @hover-border-color;
+
 /* Selected State */
 @selected-text-color: #ffffff;
 @selected-gradient: none;
@@ -80,9 +86,9 @@
 @disabled-text-color: #999999;
 
 /* ToolTip */
-@tooltip-text-color: #ffffff;
-@tooltip-background-color: #0044cc;
-@tooltip-border-color: #0044cc;
+@tooltip-text-color: #333;
+@tooltip-background-color: #e6e6e6;
+@tooltip-border-color: #bebebe;
 
 /* Validation Message */
 @validation-text-color: #c09853;

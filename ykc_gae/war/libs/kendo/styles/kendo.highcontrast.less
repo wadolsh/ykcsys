@@ -1,6 +1,6 @@
 /*
-* Kendo UI Web v2012.3.1114 (http://kendoui.com)
-* Copyright 2012 Telerik AD. All rights reserved.
+* Kendo UI Web v2013.1.319 (http://kendoui.com)
+* Copyright 2013 Telerik AD. All rights reserved.
 *
 * Kendo UI Web commercial licenses may be obtained at
 * https://www.kendoui.com/purchase/license-agreement/kendo-ui-web-commercial.aspx
@@ -10,6 +10,7 @@
 */
 @image-folder: "HighContrast";
 @texture: url(textures/glass-lighter.png);
+@tooltip-texture: url('textures/highlight.png');
 @fallback-texture: @texture;
 @widget-gradient: none;
 @widget-shadow: none;
@@ -36,6 +37,9 @@
 @hover-background-color: #a7008f;
 @hover-border-color: #a7008f;
 @hover-text-color: #ffffff;
+@focused-border-color: #fff;
+@focused-shadow: 0 0 3px 0 @shadow-color;
+@focused-item-shadow: inset 0 0 3px 1px #fff;
 @selected-background-color: #870074;
 @selected-border-color: #870074;
 @selected-text-color: #ffffff;
@@ -50,7 +54,7 @@
 @validation-border-color: #ffae00;
 @validation-text-color: #000000;
 @tooltip-background-color: #2c232b;
-@tooltip-border-color: #664e62;
+@tooltip-border-color: #cac8ca;
 @tooltip-text-color: #ffffff;
 @main-border-radius: 13px;
 @list-border-radius: @main-border-radius - 1;

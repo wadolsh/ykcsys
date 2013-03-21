@@ -20,8 +20,16 @@ var side_list_array = {};
 
 var _S43Model = Backbone.Model.extend({
 	idAttribute : _id_key,
-	url : s43_doc_url_base + "/" + this[_id_key] + "?apiKey=" + apiKey,
+	url: function() {
+		if (this.id) {
+			return s43_doc_url_base + "/" + this.id + "?apiKey=" + apiKey;
+		}
+	    return s43_doc_url;
+	},
 	parse : function(response) {
+		if (response == null) {
+			return response;
+		}
 		response['住所'] = response['都県名'] + response['区市名'] + response['町名'] + response['丁目']
 						+ (response['番地'] ? "-" + response['番地'] : "") +  (response['号'] ? "-" + response['号'] : "");
 		
@@ -271,11 +279,29 @@ var _S43ViewModeView = Backbone.View.extend({
 	},
 	
 	render : function() {
-				
+		var view = this;
 		var html1 = _.template($('#tpl_s43_card_list').html(), {
 				'data' : this.model.toJSON()
 		});
 	
+		this.$el.kendoTooltip({
+            filter: ".toolTip",
+            content: function(event) {
+            	var template = kendo.template($("#tpl_visit_history_input").html());
+            	var $template = $(template(view.model.toJSON()));
+            	$template.find('#meetType').kendoDropDownList();
+            	$template.find("#datepicker").kendoDatePicker();
+            	$template.find("#timepicker").kendoTimePicker();
+            	return $template;
+            },
+            showOn: "click",
+            autoHide: false,
+            width: 400,
+            height: 200,
+            position: "top"
+        });
+
+		
 		var $s43_card_list = $('#s43_card_list');
 		$s43_card_list.find('tbody').remove();
 		$s43_card_list.append(html1);
@@ -406,7 +432,7 @@ var _S43EditModeView = Backbone.View.extend({
 	
 	render : function() {
 		// データ投入
-		this.dataSource.read(this.model.toJSON());
+		this.dataSource.read();
 		
 		/*
 		var html1 = _.template($('#tpl_s43_card_list').html(), {

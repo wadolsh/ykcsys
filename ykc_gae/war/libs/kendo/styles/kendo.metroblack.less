@@ -1,6 +1,6 @@
 /*
-* Kendo UI Web v2012.3.1114 (http://kendoui.com)
-* Copyright 2012 Telerik AD. All rights reserved.
+* Kendo UI Web v2013.1.319 (http://kendoui.com)
+* Copyright 2013 Telerik AD. All rights reserved.
 *
 * Kendo UI Web commercial licenses may be obtained at
 * https://www.kendoui.com/purchase/license-agreement/kendo-ui-web-commercial.aspx
@@ -10,6 +10,7 @@
 */
 @image-folder: "MetroBlack";
 @texture: none;
+@tooltip-texture: none;
 @fallback-texture: none;
 @widget-gradient: none;
 @widget-shadow: none;
@@ -36,6 +37,9 @@
 @hover-background-color: #00aba9;
 @hover-border-color: #00aba9;
 @hover-text-color: #ffffff;
+@focused-border-color: @hover-border-color;
+@focused-shadow: none;
+@focused-item-shadow: inset 0 0 0 1px @hover-border-color;
 @selected-background-color: #008886;
 @selected-border-color: #008886;
 @selected-text-color: #ffffff;
@@ -66,7 +70,7 @@
 @alt-background-color: #1e1e1e;
 @input-background-color: #0e0e0e;
 @input-text-color: #ffffff;
-@shadow-color: transparent;
+@shadow-color: rgba(255,255,255,.1);
 @shadow-inset-color: transparent;
 @link-text-color: #ffffff;
 @loading-panel-color: #0e0e0e;

@@ -1,3 +1,6 @@
+/**
+ * CHOI SUNGHO
+ */
 (function($, undefined) {
 	
     $.extend(true, kendo.data, {
@@ -12,6 +15,8 @@
                 	options.success(this.data.toJSON());
                 },
                 update: function(options) {
+                	this.data.get(options.data[_id_key]).save(options.data, this.resultProcess(options));
+                	/*
                 	//for (var ind in options.data.models) {
                 		var model = options.data;
                 		var that = this;
@@ -27,25 +32,32 @@
                             error: options.error
                         });
                 	//}
+                	*/
                 },
-                destroy: {
-                	url: function(params) {
-            			return this.collections_url + "?apiKey=" + apiKey;
-            		},
-                    //type: 'DELETE',
-                    dataType: "json"
+                destroy: function(options) {
+                	this.data.get(options.data[_id_key]).destroy(this.resultProcess(options));
                 },
-                create: {
-                	url: function(params) {
-            			return this.collections_url + "?apiKey=" + apiKey;
-            		},
-                    //type: 'POST',
-                    dataType: "json"
+                create: function(options) {
+                	// uniqueの_id生成ロジックが必要（適当に時分秒にしてみた。）
+                	options.data[_id_key] = Date.now().toString();
+                	this.data.create(options.data, this.resultProcess(options));
                 },
                 parameterMap: function(options, operation) {
                     if (operation !== "read" && options.models) {
                         return kendo.stringify(options.models);
                     }
+                },
+                resultProcess : function(kendoOption) {
+                	var process = {                	
+	                	success: function(model, response, options) {
+	                		kendoOption.success(response);
+		                },
+		                error: function(model, xhr, options) {
+		                	kendoOption.error(response);
+		                }
+	                };
+                	
+                	return process;
                 }
             })
         }
