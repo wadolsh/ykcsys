@@ -13,9 +13,9 @@ body {
 
 .detail-view
 {
-    float: left;
+	
+	float: left;
     position: relative;
-    width: 471px;
     margin: -1px -1px 0 0;
 }
 
@@ -36,11 +36,16 @@ body {
 }
 .detail-view dt
 {
-    clear: left;
+	color:#ffffff;
+	background-color:#2e2e2e;
     padding: 3px 5px 3px 0;
     text-align: right;
     opacity: 0.6;
-    width: 100px;
+    width: 80px;
+}
+.detail-view dd
+{	
+    width: 160px;
 }
 .edit-buttons
 {

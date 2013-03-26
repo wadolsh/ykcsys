@@ -30,10 +30,10 @@ var _S43Model = Backbone.Model.extend({
 		if (response == null) {
 			return response;
 		}
-		response['住所'] = response['都県名'] + response['区市名'] + response['町名'] + response['丁目']
+		response['title'] = response['都県名'] + response['区市名'] + response['町名'] + response['丁目']
 						+ (response['番地'] ? "-" + response['番地'] : "") +  (response['号'] ? "-" + response['号'] : "");
 		
-		response['管理番号'] = response['_id'] + '-' + //response['区域名'] + 
+		response['no'] = response['_id'] + '-' + //response['区域名'] + 
 								response['区域番号'] + response['カード番号'] + response['枝番号'];
 
 		return response;
@@ -419,13 +419,17 @@ var _S43EditModeView = Backbone.View.extend({
         */
         
 	    //$('#edit_mode_grid').kendoGrid(this.meta_s43_kendoGrid);
-		var listView = $('#edit_mode_grid').kendoListView(this.meta_s43_kendoGrid).data("kendoListView");
+		var $listView = $('#edit_mode_grid').kendoListView(this.meta_s43_kendoGrid).data("kendoListView");
 		$(".k-add-button").click(function(e) {
-            listView.add();
+			$listView.add();
             e.preventDefault();
         });
 		
-		
+		/*
+		$("#edit_mode_grid").kendoPanelBar({
+            expandMode: "single"
+        });
+		*/
 		this.model.on('reset', this.render, this);
 		//this.render();
 	},
