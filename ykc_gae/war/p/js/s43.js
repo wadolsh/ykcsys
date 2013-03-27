@@ -30,8 +30,11 @@ var _S43Model = Backbone.Model.extend({
 		if (response == null) {
 			return response;
 		}
-		response['title'] = response['都県名'] + response['区市名'] + response['町名'] + response['丁目']
+		response['住所'] = response['都県名'] + response['区市名'] + response['町名'] + response['丁目']
 						+ (response['番地'] ? "-" + response['番地'] : "") +  (response['号'] ? "-" + response['号'] : "");
+						
+						
+		response['title'] = response['住所'] + '&nbsp;&nbsp;<a href="http://maps.google.com/maps?q=' + response['住所'] + '">[map]</a>';
 		
 		response['no'] = response['_id'] + '-' + //response['区域名'] + 
 								response['区域番号'] + response['カード番号'] + response['枝番号'];
@@ -371,6 +374,20 @@ var _S43EditModeView = Backbone.View.extend({
 		this.meta_s43_kendoGrid['template'] = kendo.template($("#s43_kendo_grid_detail").html());
 		this.meta_s43_kendoGrid['editTemplate'] = kendo.template($("#s43_kendo_grid_detail_edit").html());
 		this.meta_s43_kendoGrid['dataSource'] = this.dataSource;
+		this.meta_s43_kendoGrid['dataBound'] = function(e) {
+			
+			$("#edit_mode_grid .list-title").click(function(e) {
+				//kendo.fx($(this).next()).slideIn("up").play();
+				$(this).next().toggle('slow');
+		    });
+		    
+			/*
+			$("#edit_mode_grid").kendoPanelBar({
+	            expandMode: "single"
+	        });
+	        */
+	    };
+		
 		//this.meta_s43_kendoGrid['detailTemplate'] = kendo.template($("#s43_kendo_grid_detail").html());
 		/*
 		this.meta_s43_kendoGrid['detailInit'] = function(e) {
@@ -425,11 +442,7 @@ var _S43EditModeView = Backbone.View.extend({
             e.preventDefault();
         });
 		
-		/*
-		$("#edit_mode_grid").kendoPanelBar({
-            expandMode: "single"
-        });
-		*/
+
 		this.model.on('reset', this.render, this);
 		//this.render();
 	},

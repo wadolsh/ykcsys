@@ -159,7 +159,7 @@
 			    				<th>봉사자</th>
 			    			</tr>
 			    			<tr>
-			    				<td><%= m['住所詳細'] %>  <a href="http://maps.google.com/maps?q=<%= m['住所'] %>">[google]</a></td>
+			    				<td><%= m['住所詳細'] %></td>
 			    				<td></td>
 			    				<td class="toolTip"> / () :</td>
 			    				<td></td>
@@ -232,37 +232,43 @@
     
 	<script type="text/x-kendo-template" id="s43_kendo_grid_detail">
                         <div class='detail-view k-widget'>
-							<div>#= data['no'] # #= data['title'] #</div>
-							
+							<div class="list-title k-toolbar k-grid-toolbar"> <input type="checkbox" value="#= data['_id']#"/>  #= data['no'] # #= data['title'] #</div>
+							<div>
 							<div class="edit-buttons">
                 				<a class="k-button k-button-icontext k-edit-button" href="\\#"><span class="k-icon k-edit"></span></a>
             				</div>
-                            <dl>
+                            <ul>
 								#for(key in data.fields) {#
-								<dt>#= key #:</dt>
-								<dd>#= data[key] ? data[key] : "" #</dd>
+								<li>
+								<label>#= key #:</label>
+								#= data[key] ? data[key] : "" #
+								</li>
 								#}#
-                            </dl>
+                            </ul>
+							</div>
                         </div>
 	</script>
    	<script type="text/x-kendo-template" id="s43_kendo_grid_detail_edit">
                         <div class='detail-view k-widget'>
+							<div class="list-title k-toolbar k-grid-toolbar">#= data['no'] # #= data['title'] #</div>
+							<div>
             				<div class="edit-buttons">
                 				<a class="k-button k-button-icontext k-update-button" href="\\#"><span class="k-icon k-update" title="サーバーに修正内容を反映します。"></span></a>
-                				<a class="k-button k-button-icontext k-cancel-button" href="\\#"><span class="k-icon k-cancel" title="修正をキャンセルします。"></span></a>
+                				<a class="k-button k-button-icontext k-cancel-button" href="\\#"><span class="k-icon k-delete" title="修正をキャンセルします。"></span></a>
 								&nbsp;&nbsp;&nbsp;&nbsp;
-                				<a class="k-button k-button-icontext k-delete-button" href="\\#"><span class="k-icon k-delete" title="サーバーから即時削除になります。"></span></a>
+                				<a class="k-button k-button-icontext k-delete-button" href="\\#"><span class="k-icon k-cancel" title="サーバーから即時削除になります。"></span></a>
             				</div>
-                            <dl>
+                            <ul>
 								#for(key in data.fields) {#
 								#var field = data.fields[key]#
-								<dt>#= key #:</dt>
-								<dd>
+								<li>
+								<label>#= key #:</label>
 									<input type="text" class="k-input" data-bind="value:#= key #" name="#= key #"  #= field['editable'] == false ? "disabled" : "" #             validationMessage="required" />
 									<span data-for="#= key #" class="k-invalid-msg"></span>
-								</dd>
+								</li>
 								#}#
-                            </dl>
+                            </ul>
+							</div>
                         </div>
 	</script>
    <!-- <script src="https://apis.google.com/js/client.js?onload=OnLoadCallback"></script> -->

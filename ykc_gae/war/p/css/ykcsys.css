@@ -13,29 +13,33 @@ body {
 
 .detail-view
 {
-	
-	float: left;
+	clear: both;
     position: relative;
     margin: -1px -1px 0 0;
 }
-
-.detail-view dl
+.detail-view .list-title
 {
-    margin: 10px 0;
+	padding: 8px 8px 8px 0px 
+}
+.detail-view ul
+{
+    margin: 0;
     padding: 0;
     min-width: 0;
 }
-.detail-view dt, dd
+.detail-view li
 {
 	float: left;
+	width: 320px;
 	margin: 0;
-	padding: 3px;
+	padding: 1px;
 	height: 26px;
 	line-height: 26px;
 	overflow: hidden;
 }
-.detail-view dt
+.detail-view li label
 {
+	float: left;
 	color:#ffffff;
 	background-color:#2e2e2e;
     padding: 3px 5px 3px 0;
@@ -45,15 +49,14 @@ body {
 }
 .detail-view dd
 {	
-    width: 160px;
+
 }
 .edit-buttons
 {
     position: absolute;
-    top: 0;
     right: 0;
     width: 26px;
-    height: 200px;
+    height: 110px;
     padding: 2px 2px 0 3px;
     background-color: rgba(0,0,0,0.1);
 }
