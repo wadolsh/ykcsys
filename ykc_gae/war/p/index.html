@@ -145,10 +145,10 @@
     <!-- Placed at the end of the document so the pages load faster -->
     
     	<script type="text/template" id="tpl_s43_card_list">
-        <% _.each(data,function(m){ %>
+        <% _.each(data,function(m, s){ %>
              			<tbody>
 			    			<tr>
-			    				<td rowspan="6"><%= m[_id_key] %></td>
+			    				<td rowspan="6" data-id="<%= m[_id_key] %>"><%= m[_id_key] %></td>
 			    				<th rowspan="2">주소</th>
 			    				<td><%= m['住所'] %></td>
 			    				<td></td>
@@ -161,38 +161,38 @@
 			    			<tr>
 			    				<td><%= m['住所詳細'] %></td>
 			    				<td></td>
-			    				<td class="toolTip"> / () :</td>
+			    				<td class="visit_date"> / () :</td>
 			    				<td></td>
 			    				<td></td>
-			    				<td class="toolTip"> / () :</td>
+			    				<td class="visit_date"> / () :</td>
 			    				<td></td>
 			    			</tr>
 			    			<tr>
 			    				<th>성명</th>
 			    				<td><%= m['名前'] %> <%= m['電話番号'] %></td>
 			    				<td></td>
-			    				<td class="toolTip"> / () :</td>
+			    				<td class="visit_date"> / () :</td>
 			    				<td></td>
 			    				<td></td>
-			    				<td class="toolTip"> / () :</td>
+			    				<td class="visit_date"> / () :</td>
 			    				<td></td>
 			    			</tr>
 			    			<tr>
 			    				<th rowspan="2">비고</th>
 			    				<td rowspan="2"><%= m['備考'] %></td>
 			    				<td></td>
-			    				<td class="toolTip"> / () :</td>
+			    				<td class="visit_date"> / () :</td>
 			    				<td></td>
 			    				<td></td>
-			    				<td class="toolTip"> / () :</td>
+			    				<td class="visit_date"> / () :</td>
 			    				<td></td>
 			    			</tr>
 			    			<tr>
 			    				<td></td>
-			    				<td class="toolTip"> / () :</td>
+			    				<td class="visit_date"> / () :</td>
 			    				<td></td>
 			    				<td></td>
-			    				<td class="toolTip"> / () :</td>
+			    				<td class="visit_date"> / () :</td>
 			    				<td></td>
 			    			</tr>
 <!--
@@ -207,17 +207,17 @@
     <script type="text/template" id="tpl_visit_history_input">
 		<div>
 			<br/>
-			<select id="meetType" style="width: 45px">
+			<select id="tpl_vh_meetType" style="width: 45px">
 				<option>〇</option>
 				<option>×</option>
 				<option>△</option>
 			</select>
-			<input id="datepicker" value="10/10/2011" style="width:150px;" />
-			<input id="timepicker" value="10:00 AM" />
+			<input id="tpl_vh_datepicker" value="10/10/2011" style="width:150px;" />
+			<input id="tpl_vh_timepicker" value="10:00 AM" />
+			<br/><br/>
+			備考：<textarea id="tpl_vh_contents" value=""/>
 			<br/>
-			備考：<textarea id="contents" value=""/>
-			<br/>
-			<button id="submit" class="k-button" style="width: 200px">登録</button>
+			<button id="tpl_vh_submit" class="k-button" style="width: 200px">登録</button>
 		</div>
     </script>
     
@@ -232,7 +232,9 @@
     
 	<script type="text/x-kendo-template" id="s43_kendo_grid_detail">
                         <div class='detail-view k-widget'>
-							<div class="list-title k-toolbar k-grid-toolbar"> <input type="checkbox" value="#= data['_id']#"/>  #= data['no'] # #= data['title'] #</div>
+							<div class="list-title k-toolbar k-grid-toolbar"> <input type="checkbox" value="#= data['_id']#"/>  #= data['no'] # #= data['title'] #
+								<a class="k-button k-button-icontext " href="\\#" onclick="titleToggle(this);"><span class="k-icon k-i-arrow-s"></span></a>
+							</div>
 							<div>
 							<div class="edit-buttons">
                 				<a class="k-button k-button-icontext k-edit-button" href="\\#"><span class="k-icon k-edit"></span></a>
@@ -261,10 +263,19 @@
                             <ul>
 								#for(key in data.fields) {#
 								#var field = data.fields[key]#
+								#data['disabled'] = field['disabled']#
 								<li>
 								<label>#= key #:</label>
-									<input type="text" class="k-input" data-bind="value:#= key #" name="#= key #"  #= field['editable'] == false ? "disabled" : "" #             validationMessage="required" />
-									<span data-for="#= key #" class="k-invalid-msg"></span>
+									#if(field['type'] == 'kendoDropDownList') {#
+										<select class="k-input" name="#= key #" data-bind="value: #= key #">
+										#for(optionkey in field.option) {#
+											<option value="#= field.option[optionkey] #" > #= optionkey # </option>
+										#}#
+										</select>
+									#} else {#
+										<input type="text" class="k-input" data-bind="value:#= key #, disabled:disabled" name="#= key #"  validationMessage="required" />
+									#}#
+										<span data-for="#= key #" class="k-invalid-msg"></span>
 								</li>
 								#}#
                             </ul>

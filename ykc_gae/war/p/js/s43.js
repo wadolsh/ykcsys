@@ -8,6 +8,10 @@ function objView(myObj) {
 	alert(str);
 }
 
+function titleToggle(that) {
+	//kendo.fx($(this).next()).slideIn("up").play();
+	$(that).parent().next().toggle('slow');
+}
 
 $.ajaxSetup({
 	url: s43_doc_url,
@@ -287,28 +291,33 @@ var _S43ViewModeView = Backbone.View.extend({
 				'data' : this.model.toJSON()
 		});
 	
-		this.$el.kendoTooltip({
-            filter: ".toolTip",
-            content: function(event) {
-            	var template = kendo.template($("#tpl_visit_history_input").html());
-            	var $template = $(template(view.model.toJSON()));
-            	$template.find('#meetType').kendoDropDownList();
-            	$template.find("#datepicker").kendoDatePicker();
-            	$template.find("#timepicker").kendoTimePicker();
-            	return $template;
-            },
-            showOn: "click",
-            autoHide: false,
-            width: 400,
-            height: 200,
-            position: "top"
-        });
 
-		
 		var $s43_card_list = $('#s43_card_list');
 		$s43_card_list.find('tbody').remove();
 		$s43_card_list.append(html1);
 		
+		this.$el.find('tbody tr:first-child td:first-child').click(function(e) {
+			var id = $(this).data('id');
+			var model = view.model.get(id);
+			
+			var template = kendo.template($("#tpl_visit_history_input").html(), model.toJSON());
+			var $template = $(template(view.model.toJSON()));
+			$template.find('#tpl_vh_meetType').kendoDropDownList();
+			$template.find("#tpl_vh_datepicker").kendoDatePicker();
+			$template.find("#tpl_vh_timepicker").kendoTimePicker();
+			
+			$template.kendoWindow({
+				appendTo: "#view_mode",
+                width: "505px",
+                height: "315px",
+                title: "訪問履歴入力",
+                actions: ["Close"],
+                close : function(e) {
+                	this.destroy();
+                }
+            }).data("kendoWindow").open();
+		});
+
 		return this;
 	}
 });
@@ -375,11 +384,12 @@ var _S43EditModeView = Backbone.View.extend({
 		this.meta_s43_kendoGrid['editTemplate'] = kendo.template($("#s43_kendo_grid_detail_edit").html());
 		this.meta_s43_kendoGrid['dataSource'] = this.dataSource;
 		this.meta_s43_kendoGrid['dataBound'] = function(e) {
-			
+			/*
 			$("#edit_mode_grid .list-title").click(function(e) {
 				//kendo.fx($(this).next()).slideIn("up").play();
 				$(this).next().toggle('slow');
 		    });
+		    */
 		    
 			/*
 			$("#edit_mode_grid").kendoPanelBar({
