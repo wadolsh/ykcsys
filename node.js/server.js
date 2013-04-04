@@ -7,9 +7,8 @@ http.createServer(function(req, res) {
     //console.log(req.headers);
     // on every request, we'll output 'Hello world'
     //res.end("Hello world from Cloud9!---");
-    fs.readFile('ykc_gae/war' + req.url, function(error, data) {
+    fs.readFile('ykc_gae/war' + (req.url.charAt(req.url.length - 1) == '/' ? req.url + 'index.html' : req.url) , function(error, data) {
         var n = null;
-        var ext = null;
         if ((n = req.url.lastIndexOf(".")) != -1) {
             //console.log(ext);
             switch (req.url.substring(n)) {
@@ -30,7 +29,6 @@ http.createServer(function(req, res) {
                     break;
                 default :
                     res.writeHead(200, {'Content-Type': 'text/html'});
-                
             }
         }
 

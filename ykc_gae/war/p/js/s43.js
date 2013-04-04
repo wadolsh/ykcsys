@@ -59,6 +59,46 @@ var _S4Collection = Backbone.Collection.extend({
     },
 });
 
+var _S43VisitHistoryModel = Backbone.Model.extend({
+    idAttribute : _id_key,
+	url: function() {
+		if (this.id) {
+			return s43_visit_history_doc_url_base + "/" + this.id + "?apiKey=" + apiKey;
+		}
+	    return s43_visit_history_doc_url;
+	},
+	parse : function(response) {
+		if (response == null) {
+			return response;
+		}
+		return response;
+	},
+	
+	initialize : function() {
+	}
+});
+
+var _S43VisitHistoryCollection = Backbone.Collection.extend({
+    _s43_id: null,
+	url : s43_visit_history_doc_url,
+    model: function(attrs, options) {
+        attrs._s43_id = options.collection._s43_id;
+        return new _S43VisitHistoryModel(attrs, options);
+    },
+    parse: function(response) {
+        return response;
+    },
+});
+
+
+
+
+
+
+
+
+
+
 var _S43TabView = Backbone.View.extend({
 	el : $('#s43_tab'),
 	filterd_collection : new _S4Collection(),
@@ -281,6 +321,33 @@ var _S43ViewModeView = Backbone.View.extend({
 	el : $('#view_mode'),
 	
 	initialize : function() {
+        
+        this.visitCollection = new _S43VisitHistoryCollection();
+        
+        //var template = kendo.template($("#tpl_visit_history_input").html(), model.toJSON());
+        //var $template = $(template(view.model.toJSON()));
+		//$template.find('#tpl_vh_meetType').kendoDropDownList();
+		//$template.find("#tpl_vh_datepicker").kendoDatePicker();
+		//$template.find("#tpl_vh_timepicker").kendoTimePicker();
+
+        var meta_s43_dataSource = JSON.parse(localStorage.getItem('meta_s43_visit_history_dataSource'));
+		meta_s43_dataSource.data = this.visitCollection;
+		this.visitHistoryDataSource = new kendo.data.DataSource(meta_s43_dataSource);
+        
+	    var kendoList = JSON.parse(localStorage.getItem('meta_s43_visit_history_kendoList'));
+		kendoList.template = kendo.template($("#s43_kendo_grid_detail").html());
+		kendoList.editTemplate = kendo.template($("#s43_kendo_grid_detail_edit").html());
+		kendoList.dataSource = this.visitHistoryDataSource;
+
+        //$('#visit_history_list').replaceWith('<div id="visit_history_list"></div>');
+        var $listView = $('#visit_history_list').kendoListView(kendoList).data("kendoListView");
+    	this.$el.find(".k-add-button").click(function(e) {
+			$listView.add();
+            e.preventDefault();
+        });
+        
+        
+        
 		this.model.on('reset', this.render, this);
 		this.render();
 	},
@@ -295,28 +362,46 @@ var _S43ViewModeView = Backbone.View.extend({
 		var $s43_card_list = $('#s43_card_list');
 		$s43_card_list.find('tbody').remove();
 		$s43_card_list.append(html1);
-		
+        
 		this.$el.find('tbody tr:first-child td:first-child').click(function(e) {
 			var id = $(this).data('id');
 			var model = view.model.get(id);
-			
-			var template = kendo.template($("#tpl_visit_history_input").html(), model.toJSON());
-			var $template = $(template(view.model.toJSON()));
-			$template.find('#tpl_vh_meetType').kendoDropDownList();
-			$template.find("#tpl_vh_datepicker").kendoDatePicker();
-			$template.find("#tpl_vh_timepicker").kendoTimePicker();
-			
-			$template.kendoWindow({
-				appendTo: "#view_mode",
-                width: "505px",
-                height: "315px",
-                title: "訪問履歴入力",
-                actions: ["Close"],
-                close : function(e) {
-                	this.destroy();
+            
+            view.visitCollection._s43_id = id;
+            view.visitCollection.fetch({
+                data: {q :'{_s43_id:' +  id + '}'},
+                success : function(collection, response, options) {
+                    
+                    view.visitHistoryDataSource.read();
+                    
+                    /*
+                    view.$el.find(".k-add-button").click(function(e) {
+                    	$listView.add();
+                        e.preventDefault();
+                    });
+                    */
+                    
+        			$('#visit_history_window').kendoWindow({
+        				appendTo: "body",
+                        width: "505px",
+                        height: "315px",
+                        title: "訪問履歴入力",
+                        actions: ["Close", "Maximize"]
+                        /*
+                        close : function(e) {
+                        	this.destroy();
+                        }
+                        */
+                    }).data("kendoWindow").center().open();
+        		    
                 }
-            }).data("kendoWindow").open();
-		});
+            });
+        });
+
+
+
+
+
 
 		return this;
 	}
@@ -447,7 +532,7 @@ var _S43EditModeView = Backbone.View.extend({
         
 	    //$('#edit_mode_grid').kendoGrid(this.meta_s43_kendoGrid);
 		var $listView = $('#edit_mode_grid').kendoListView(this.meta_s43_kendoGrid).data("kendoListView");
-		$(".k-add-button").click(function(e) {
+		this.$el.find(".k-add-button").click(function(e) {
 			$listView.add();
             e.preventDefault();
         });

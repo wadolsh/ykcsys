@@ -2,6 +2,11 @@ body {
   padding-top: 60px;
   padding-bottom: 40px;
 }
+
+input {
+    margin-bottom: 0px;
+}
+
 .sidebar-nav {
   padding: 9px 0;
 }
@@ -21,6 +26,10 @@ body {
 {
 	padding: 8px 8px 8px 0px 
 }
+.detail-view .list-title a.k-button
+{
+    float : right;
+}
 .detail-view ul
 {
     margin: 0;
@@ -33,7 +42,7 @@ body {
 	width: 320px;
 	margin: 0;
 	padding: 1px;
-	height: 26px;
+	height: 28px;
 	line-height: 26px;
 	overflow: hidden;
 }
@@ -46,6 +55,7 @@ body {
     text-align: right;
     opacity: 0.6;
     width: 80px;
+    line-height:28px;
 }
 .detail-view dd
 {	
