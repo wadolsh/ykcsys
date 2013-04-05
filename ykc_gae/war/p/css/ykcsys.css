@@ -1,7 +1,9 @@
-body {
-  padding-top: 60px;
-  padding-bottom: 40px;
+@media (min-width: 978px) {
+    body {
+      padding-top: 60px;
+    }
 }
+
 
 input {
     margin-bottom: 0px;
@@ -49,8 +51,6 @@ input {
 .detail-view li label
 {
 	float: left;
-	color:#ffffff;
-	background-color:#2e2e2e;
     padding: 3px 5px 3px 0;
     text-align: right;
     opacity: 0.6;
@@ -74,4 +74,13 @@ input {
 {
     width: 26px;
     margin-bottom: 1px;
+}
+
+
+
+.map_search_area {
+    position : absolute;
+    right : 10px;
+    bottom : 20px;
+    z-index: 10;
 }

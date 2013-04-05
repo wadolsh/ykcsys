@@ -61,6 +61,17 @@ var _S4Collection = Backbone.Collection.extend({
 
 var _S43VisitHistoryModel = Backbone.Model.extend({
     idAttribute : _id_key,
+    
+    initialize: function() {
+        this.on('add change', function() {
+            var strDate = kendo.toString(this.get('訪問日'), "yyyy/MM/dd");
+            this.set('訪問日', strDate, {silent: true});
+            
+            strDate = kendo.toString(this.get('時間'), "hh:mm");
+            this.set('時間', strDate, {silent: true});
+        });
+    },
+    
 	url: function() {
 		if (this.id) {
 			return s43_visit_history_doc_url_base + "/" + this.id + "?apiKey=" + apiKey;
@@ -71,10 +82,12 @@ var _S43VisitHistoryModel = Backbone.Model.extend({
 		if (response == null) {
 			return response;
 		}
+        
+        response['title'] = response['出会い有無'] + '&nbsp;&nbsp;' + response['訪問日'] + '&nbsp;' + response['時間'] + '&nbsp;' + response['訪問者'];
+		
+		response['no'] = '';//response['_id'];
+        
 		return response;
-	},
-	
-	initialize : function() {
 	}
 });
 
@@ -82,7 +95,9 @@ var _S43VisitHistoryCollection = Backbone.Collection.extend({
     _s43_id: null,
 	url : s43_visit_history_doc_url,
     model: function(attrs, options) {
-        attrs._s43_id = options.collection._s43_id;
+        if (!attrs._s43_id) {
+            attrs._s43_id = options.collection._s43_id;
+        }
         return new _S43VisitHistoryModel(attrs, options);
     },
     parse: function(response) {
@@ -122,8 +137,8 @@ var _S43TabView = Backbone.View.extend({
 		
 		new _S43ViewModeView({model : this.filterd_collection});
 		new _S43EditModeView({model : this.filterd_collection});
-		new _S43MainMapView({model : this.filterd_collection});
-				
+		this.mapModeView = new _S43MainMapView({model : this.filterd_collection});
+        	
 		this.collection = new _S4Collection();
 		this.collection.on('reset', this.render, this);
 		
@@ -300,17 +315,26 @@ var _S43TabView = Backbone.View.extend({
 	
 	s43MapModeToggle : function(event) {
 		//$('#map_mode').toggle();
-		
-		var currentSide = $("#mode_container .current");
-		var thisSide = $("#map_mode");
-		
-        if (currentSide[0] == thisSide[0]) {
-        	return;
-        }
-		
-		currentSide.removeClass("current");
-		thisSide.addClass("current");
-		kendo.fx("#mode_container").flipHorizontal(currentSide, thisSide).play();
+        var view = this;
+        
+		$('#map_mode').kendoWindow({
+			appendTo: "body",
+            width: "430px",
+            height: "500px",
+            title: "マップツール",
+            actions: ["Close", "Maximize"],
+            activate : function(ev) {
+                this.center();
+                this.maximize();
+                view.mapModeView.render();
+            },
+            close : function(ev) {
+            	//this.destroy();
+                this.restore();
+            }
+
+        }).data("kendoWindow").open();
+
 	},
 	
 	s4PrintModeToggle : function() {
@@ -323,12 +347,7 @@ var _S43ViewModeView = Backbone.View.extend({
 	initialize : function() {
         
         this.visitCollection = new _S43VisitHistoryCollection();
-        
-        //var template = kendo.template($("#tpl_visit_history_input").html(), model.toJSON());
-        //var $template = $(template(view.model.toJSON()));
-		//$template.find('#tpl_vh_meetType').kendoDropDownList();
-		//$template.find("#tpl_vh_datepicker").kendoDatePicker();
-		//$template.find("#tpl_vh_timepicker").kendoTimePicker();
+        //this.visitHistoryCollection = new _S43VisitHistoryCollection();
 
         var meta_s43_dataSource = JSON.parse(localStorage.getItem('meta_s43_visit_history_dataSource'));
 		meta_s43_dataSource.data = this.visitCollection;
@@ -354,24 +373,45 @@ var _S43ViewModeView = Backbone.View.extend({
 	
 	render : function() {
 		var view = this;
-		var html1 = _.template($('#tpl_s43_card_list').html(), {
-				'data' : this.model.toJSON()
-		});
-	
-
-		var $s43_card_list = $('#s43_card_list');
-		$s43_card_list.find('tbody').remove();
-		$s43_card_list.append(html1);
+        var ids = new Array();
+        this.model.each(function(model){
+            ids.push(model.id)
+        });
         
-		this.$el.find('tbody tr:first-child td:first-child').click(function(e) {
-			var id = $(this).data('id');
-			var model = view.model.get(id);
-            
-            view.visitCollection._s43_id = id;
-            view.visitCollection.fetch({
-                data: {q :'{_s43_id:' +  id + '}'},
-                success : function(collection, response, options) {
+        this.visitCollection.fetch({
+            data: {q : '{_s43_id: {$in: [' +  ids.toString() + ']} }',
+                   s : '{訪問日: -1}'},
+            success : function(collection, response, options) {
+                var html1 = _.template($('#tpl_s43_card_list').html(), {
+                    'data' : view.model.toJSON(),
+                    'subData' : collection.toJSON()
+        		});
+        
+        		var $s43_card_list = $('#s43_card_list');
+        		$s43_card_list.find('tbody').remove();
+        		$s43_card_list.append(html1);
+ 
+        		view.$el.find('tbody tr:first-child td:first-child').click(function(e) {
+
+                    var id = $(this).data('id');
+                	var model = view.model.get(id);
                     
+                    // 新規登録時にmodelに_s43_idを設定するための保管
+                    view.visitCollection._s43_id = id;
+                    
+                    
+                    //var visitData = view.visitCollection.filter(function(v){ 
+                    //    return v.get('_s43_id') == id; 
+                    //});
+                    //view.visitHistoryCollection.reset(visitData);
+                    
+                    view.visitHistoryDataSource.filter({
+                        logic: "or",
+                        filters: [
+                            { field: "_s43_id", operator: "eq", value: id },
+                            { field: "_id", operator: "eq", value: "" }
+                        ]
+                    });
                     view.visitHistoryDataSource.read();
                     
                     /*
@@ -383,26 +423,26 @@ var _S43ViewModeView = Backbone.View.extend({
                     
         			$('#visit_history_window').kendoWindow({
         				appendTo: "body",
-                        width: "505px",
-                        height: "315px",
+                        width: "430px",
+                        height: "500px",
                         title: "訪問履歴入力",
-                        actions: ["Close", "Maximize"]
-                        /*
-                        close : function(e) {
-                        	this.destroy();
+                        actions: ["Close", "Maximize"],
+                        activate : function(ev) {
+                            this.center();
+                            this.maximize();
+                        },
+                        close : function(ev) {
+                        	//this.destroy();
+                            this.restore();
+                            view.render();
                         }
-                        */
-                    }).data("kendoWindow").center().open();
-        		    
-                }
-            });
+
+                    }).data("kendoWindow").open();
+                    
+                });
+            }
         });
-
-
-
-
-
-
+        
 		return this;
 	}
 });
@@ -648,7 +688,7 @@ var _S43MainMapView = Backbone.View.extend({
 		MapUtil.detectBrowser(mapDivId);
 		this.model.on('reset', this.render, this);
 		
-		this.render();
+		//this.render();
 	},
 	
 	render : function() {
@@ -677,11 +717,13 @@ var _S43MainMapView = Backbone.View.extend({
 			this.map.setCenter(this.markerArray[0].getPosition());
 			this.map.setZoom(13);
 		}
+        google.maps.event.trigger(this.map, 'resize');
+        return this;
 	},
 	
 	addressSearch : function() {
 		
-		var address = $('#map_address_input').val();
+		var address = this.$el.find('.map_address_input').val();
 		if (!address) {
 			return;
 		}
@@ -703,3 +745,95 @@ var _S43MainMapView = Backbone.View.extend({
 
 
 
+var _S43latlngMapView = Backbone.View.extend({
+    el : $('#latLng_tool'),
+	
+	events : {
+		"click #map_address_search_button" : "addressSearch",
+		"click #current_position_button" : "currentPosition"
+	},
+	
+	initialize : function() {
+		var mapDivId = 'latlng_canvas';
+		this.markerArray = new Array();
+		this.map = MapUtil.newMap(mapDivId);
+		MapUtil.getCurrentPosition(this.map);
+		MapUtil.detectBrowser(mapDivId);
+		this.model.on('reset', this.render, this);
+		
+		//this.render();
+	},
+    
+	render : function() {
+		for (var ind in this.markerArray) {
+			// 既存マップをマーカーをクリア
+			this.markerArray[ind].setMap(null);
+		}
+		
+		var view = this;
+		
+		this.markerArray.length = 0;
+		
+		this.model.each(function(model1){
+			if (model1.get('latlng')) {
+				MapUtil.s43RoofMarkerMapByPos(view.map, 
+											  view.markerArray,
+											  model1.get(_id_key),
+											  model1.get('latlng'),
+											  model1.get('枝番号'),
+											  (model1.get('住所') + '<br/>' + model1.get('住所詳細')));
+			}
+		});
+		
+		// 最初目をマップの中央に表示
+		if (this.markerArray.length > 0) {
+			this.map.setCenter(this.markerArray[0].getPosition());
+			this.map.setZoom(13);
+		}
+        google.maps.event.trigger(this.map, 'resize');
+        return this;
+	},
+	
+	addressSearch : function() {
+		
+		var address = this.$el.find('.map_address_input').val();
+		if (!address) {
+			return;
+		}
+		
+		var view = this;
+		if (view.searchdMarker) {
+			view.searchdMarker.setMap(null);
+		}
+		
+		MapUtil.markerMapByAddress(this.map, address, function(marker, results) {
+			view.searchdMarker = marker;
+		});
+	},
+	
+	currentPosition : function(event) {
+		MapUtil.getCurrentPosition(this.map);
+	},
+    
+    open: function(model) {
+        this.$el.kendoWindow({
+			appendTo: "body",
+            width: "430px",
+            height: "500px",
+            title: "住所座標ツール",
+            actions: ["Close", "Maximize"],
+            activate : function(ev) {
+                this.center();
+                this.maximize();
+                view.mapModeView.render();
+            },
+            close : function(ev) {
+            	//this.destroy();
+                this.restore();
+            }
+
+        }).data("kendoWindow").open();
+    }
+});
+
+//var latlngTool = new _S43latlngMapView();

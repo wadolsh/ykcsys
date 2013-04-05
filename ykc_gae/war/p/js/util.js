@@ -186,7 +186,8 @@ _MapUtil.prototype = {
 	detectBrowser : function(divId) {
 		var useragent = navigator.userAgent;
 		var mapdiv = document.getElementById(divId);
-		    
+
+        /*
 		if (useragent.indexOf('iPhone') != -1 || useragent.indexOf('Android') != -1 ) {
 			mapdiv.style.width = '100%';
 		    mapdiv.style.height = '400px';
@@ -194,9 +195,8 @@ _MapUtil.prototype = {
 			mapdiv.style.width = '100%';
 			mapdiv.style.height = '400px'; 
 		}
+        */
 	}
-    
-    
 };
 var MapUtil = new _MapUtil();
 
