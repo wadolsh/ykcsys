@@ -15,7 +15,9 @@ _MapUtil.prototype = {
     
 	newMap : function(id, option) {
 		option = option || this.mapOptions;
-		return new google.maps.Map(document.getElementById(id), option);
+        var map = new google.maps.Map(document.getElementById(id), option);
+        map.markerArray = new Array();
+		return map;
 	},
 	
 	mapAppLink : function(loc, content) {
@@ -30,34 +32,38 @@ _MapUtil.prototype = {
 			draggable:true,
 			animation: google.maps.Animation.DROP,
 			title: 'Draggable marker',
-			position: pos
+			position: pos,
+            icon: './img/map_icon/lwt_map_icons/green/T.png'
 		});
 		
+        map.markerArray.push(marker);
+        
 		google.maps.event.addListener(marker, 'dragend', function() {  
 			MapUtil.getAddressByPos(marker.getPosition(), fun2);
-		}); 
+		});
 	},
 	
-	s43RoofMarkerMapByPos : function(map, markerArray, _docId, pos, cid, content) {
-		var idx = markerArray.length;
-		markerArray[idx] = new google.maps.Marker({
+	s43RoofMarkerMapByPos : function(map, _docId, pos, cid, content) {
+		var marker = new google.maps.Marker({
 			map: map,
 			animation: google.maps.Animation.DROP,
 			position: pos,
-			icon: './img/map_icon/lwt_map_icons/blue/' + Number(cid) + '.png'
+			icon: './img/map_icon/lwt_map_icons/green/' + Number(cid) + '.png'
 		});
-		
+
+        map.markerArray.push(marker);
+        
 		var infowindow = new google.maps.InfoWindow({
 			content : content
 		});
 		
-    	google.maps.event.addListener(markerArray[idx], 'click', function() {
+    	google.maps.event.addListener(marker, 'click', function() {
     		if (infowindow.isOpen) {
     			infowindow.close();
     			infowindow.isOpen = false;
     		} else {
 				infowindow.setContent(content + " " + MapUtil.mapAppLink(pos, _docId));
-				infowindow.open(map, markerArray[idx]);
+				infowindow.open(map, marker);
 				infowindow.isOpen = true;
     		}
     	});
@@ -76,7 +82,7 @@ _MapUtil.prototype = {
 					position: results[0].geometry.location,
 					icon: './img/map_icon/lwt_map_icons/green/T.png'
 				});
-				
+				map.markerArray.push(marker);
 				//marker.getIcon().scaledSize = 1;
 				
 				google.maps.event.addListener(marker, 'dragend', function() {  
@@ -105,6 +111,8 @@ _MapUtil.prototype = {
 					position: results[0].geometry.location,
 					icon: './img/map_icon/lwt_map_icons/green/S.png'
 				});
+                
+                map.markerArray.push(marker);
 
 				if (fun) {
 					fun(marker, results);
@@ -179,10 +187,29 @@ _MapUtil.prototype = {
 	        // Browser doesn't support Geolocation
 	   		//alert('b');
 	    }
-	    
-	    return null;
+
+        return null;
 	},
 	
+    /** マップ内のマーカーをすべてクリア */
+    clearAllMarker : function(map) {
+        for (var ind in map.markerArray) {
+			// 既存マップをマーカーをクリア
+			map.markerArray[ind].setMap(null);
+		}
+        map.markerArray.length = 0;
+    },
+    
+    /** 指定マーカーをセンターに表示 */
+    markerMoveToCenter : function(map, marker, zoom) {
+        if (map.markerArray.length > 0) {
+            marker = marker || map.markerArray[0];
+            zoom = zoom || 16;
+			map.setCenter(marker.getPosition());
+			map.setZoom(zoom);
+		}
+    },
+    
 	detectBrowser : function(divId) {
 		var useragent = navigator.userAgent;
 		var mapdiv = document.getElementById(divId);

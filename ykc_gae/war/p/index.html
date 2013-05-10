@@ -76,7 +76,7 @@
 					
 <div id="mode_container">
 					<div id="view_mode" class="side">
-                        <div id="visit_history_window">
+                        <div id="visit_history_window" style="display:none">
                             <div class="k-toolbar k-grid-toolbar">
 		                        <a class="k-button k-button-icontext k-add-button" href="#"><span class="k-icon k-add"></span>Add new record</a>
 	                        </div>
@@ -104,19 +104,23 @@
 						<div id="edit_mode_grid"></div>
 					</div>
 					
-					<div id="map_mode" class="side">
+					<div id="map_mode" class="side" style="display: none;">
 						<div class="input-append map_search_area">
 							<input type="text" class="map_address_input"/>
-							<button type="button" class="btn " id="map_address_search_button">住所検索</button>
-							<button type="button" class="btn btn-success" id="current_position_button">現在位置</button>
+							<button type="button" class="btn map_address_search_button">住所検索</button>
+							<button type="button" class="btn btn-success current_position_button">現在位置</button>
 						</div>
 						<div id="map_canvas" style="width:100%; height:100%"></div>
 					</div>
-    				<div id="latLng_tool" class="side">
+    				<div id="latLng_tool" class="side" style="display: none;">
 						<div class="input-append map_search_area">
+                            <input type="text" id="latLng_tool_geocode_address" readonly /><br/>
+                            <input type="text" id="latLng_tool_geocode_lat" readonly /><br/>
+                            <input type="text" id="latLng_tool_geocode_lng" readonly />
+                            <button type="button" class="btn latlngAdd">座標登録</button><br/>
 							<input type="text" class="map_address_input"/>
-							<button type="button" class="btn " id="map_address_search_button">住所検索</button>
-							<button type="button" class="btn btn-success" id="current_position_button">現在位置</button>
+							<button type="button" class="btn map_address_search_button">住所検索</button>
+							<button type="button" class="btn btn-success current_position_button">現在位置</button>
 						</div>
 						<div id="latLng_canvas" style="width:100%; height:100%"></div>
 					</div>

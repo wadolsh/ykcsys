@@ -38,9 +38,10 @@ var _S43Model = Backbone.Model.extend({
 						+ (response['番地'] ? "-" + response['番地'] : "") +  (response['号'] ? "-" + response['号'] : "");
 						
 						
-		response['title'] = response['住所'] + '&nbsp;&nbsp;<a href="http://maps.google.com/maps?q=' + response['住所'] + '">[map]</a>';
+		response['title'] = '<a href="http://maps.google.com/maps?q=' + response['住所'] + '">' + response['住所'] + '</a>'
+                                + '&nbsp;&nbsp; ' + '<a href="javascript:void(0);" onclick="latlngTool.open(' + response[_id_key] + ')">位置マップ</a>';
 		
-		response['no'] = response['_id'] + '-' + //response['区域名'] + 
+		response['no'] = response[_id_key] + '-' + //response['区域名'] + 
 								response['区域番号'] + response['カード番号'] + response['枝番号'];
 
 		return response;
@@ -64,7 +65,7 @@ var _S43VisitHistoryModel = Backbone.Model.extend({
     
     initialize: function() {
         this.on('add change', function() {
-            var strDate = kendo.toString(this.get('訪問日'), "yyyy/MM/dd");
+            var strDate = kendo.toString(this.get('訪問日'), "MM/dd");
             this.set('訪問日', strDate, {silent: true});
             
             strDate = kendo.toString(this.get('時間'), "hh:mm");
@@ -263,14 +264,16 @@ var _S43TabView = Backbone.View.extend({
 					}
 				}
 				
+                /*
 				if (model.get('geocode_lat') && model.get('geocode_lng')) {
 					model.set('latlng', new google.maps.LatLng(model.get('geocode_lat'), model.get('geocode_lng')));
 				}
+                */
 				
 				return true;
 			});
 		} else {
-			filterd_data = s43TabView.collection;
+			filterd_data = s43TabView.collection.toArray();
 		}
 
 		
@@ -365,8 +368,6 @@ var _S43ViewModeView = Backbone.View.extend({
             e.preventDefault();
         });
         
-        
-        
 		this.model.on('reset', this.render, this);
 		this.render();
 	},
@@ -398,7 +399,6 @@ var _S43ViewModeView = Backbone.View.extend({
                     
                     // 新規登録時にmodelに_s43_idを設定するための保管
                     view.visitCollection._s43_id = id;
-                    
                     
                     //var visitData = view.visitCollection.filter(function(v){ 
                     //    return v.get('_s43_id') == id; 
@@ -452,9 +452,7 @@ var _S43EditModeView = Backbone.View.extend({
 	el : $('#edit_mode'),
 	
 	events : {
-		"click td[data-docid]" : "toggleEditArea",
-		"click a.geocoding" : "geocoding",
-		"click a.markerAdd" : "markerAdd"
+		"click td[data-docid]" : "toggleEditArea"
 	},
 	
 	initialize : function() {
@@ -598,63 +596,6 @@ var _S43EditModeView = Backbone.View.extend({
 		return this;
 	},
 	
-	geocoding : function(event) {
-		
-		var docid = $(event.target).data('docid');
-		var $geocode_map = $('#geocode_map' + docid);
-		var $tr = $geocode_map.parent().parent();
-		
-		if($tr.css('display') != 'none') {
-			$tr.hide();
-			return;
-		} else {
-			$tr.show();
-		}
-		
-		$geocode_map.parent().height(300);
-		
-	    var map = MapUtil.newMap("geocode_map" + docid);
-	    
-	    var markerDropStop = function(pos, result) {
-	    	$('#geocode_lat' + docid).val(pos.lat());
-			$('#geocode_lng' + docid).val(pos.lng());
-			$('#geocode_span_lat' + docid).text(pos.lat());
-			$('#geocode_span_lng' + docid).text(pos.lng());
-			
-	    	alert(result[0].formatted_address);
-		};
-		var model = s43TabView.collection.get(docid);
-	    if (model.get('geocode_lat') && model.get('geocode_lng')) {
-	    	MapUtil.s43DragAbleMarkerMapByPos(map, new google.maps.LatLng(model.get('geocode_lat'), model.get('geocode_lng')), markerDropStop);
-	    	return;
-	    } else {
-		    MapUtil.s43MarkerMapByAddress(map, model.get('住所'), function(results) {
-				$('#geocode_lat' + docid).val(results[0].geometry.location.lat());
-				$('#geocode_lng' + docid).val(results[0].geometry.location.lng());
-				$('#geocode_span_lat' + docid).text(results[0].geometry.location.lat());
-				$('#geocode_span_lng' + docid).text(results[0].geometry.location.lng());
-		    }, markerDropStop);
-	    }
-	    google.maps.event.trigger(map, 'resize');
-
-	},
-	
-	markerAdd : function() {
-		var docid = $(event.target).data('docid');
-		var model = s43TabView.collection.get(docid);
-
-		model.set('geocode_lat', $('#geocode_lat' + docid).val());
-		model.set('geocode_lng', $('#geocode_lng' + docid).val());
-		
-		//model.save({});
-		
-		$.post(s43_doc_url + '?_method=put', {_id_key : model.get(_id_key), 'geocode_lat' : model.get('geocode_lat'), 'geocode_lng' : model.get('geocode_lng')}, function () {
-			
-		}, "json");
-		
-		alert("saved");
-	},
-	
 	toggleEditArea : function(event) {
 		var docid = $(event.target).data('docid');
 		var $edit_area = $('#edit_area' + docid);
@@ -667,7 +608,6 @@ var _S43EditModeView = Backbone.View.extend({
 		} else {
 			$tr.show();
 		}
-		
 	}
 });
 
@@ -675,14 +615,12 @@ var _S43MainMapView = Backbone.View.extend({
 	el : $('#map_mode'),
 	
 	events : {
-		"click #map_address_search_button" : "addressSearch",
-		"click #current_position_button" : "currentPosition"
+		"click .map_address_search_button" : "addressSearch",
+		"click .current_position_button" : "currentPosition"
 	},
 	
 	initialize : function() {
 		var mapDivId = 'map_canvas';
-		
-		this.markerArray = new Array();
 		this.map = MapUtil.newMap(mapDivId);
 		MapUtil.getCurrentPosition(this.map);
 		MapUtil.detectBrowser(mapDivId);
@@ -692,35 +630,27 @@ var _S43MainMapView = Backbone.View.extend({
 	},
 	
 	render : function() {
-		for (var ind in this.markerArray) {
-			// 既存マップをマーカーをクリア
-			this.markerArray[ind].setMap(null);
-		}
+		MapUtil.clearAllMarker(this.map);
 		
 		var view = this;
 		
-		this.markerArray.length = 0;
-		
-		this.model.each(function(model1){
-			if (model1.get('latlng')) {
-				MapUtil.s43RoofMarkerMapByPos(view.map, 
-											  view.markerArray,
-											  model1.get(_id_key),
-											  model1.get('latlng'),
-											  model1.get('枝番号'),
-											  (model1.get('住所') + '<br/>' + model1.get('住所詳細')));
+		this.model.each(function(target_model){
+			if (target_model.get('geocode_lat') && target_model.get('geocode_lng')) {
+				MapUtil.s43RoofMarkerMapByPos(view.map,
+											  target_model.get(_id_key),
+											  //target_model.get('latlng'),
+                                              new google.maps.LatLng(target_model.get('geocode_lat'), target_model.get('geocode_lng')),
+											  target_model.get('枝番号'),
+											  (target_model.get('住所') + '<br/>' + target_model.get('住所詳細')));
 			}
 		});
 		
 		// 最初目をマップの中央に表示
-		if (this.markerArray.length > 0) {
-			this.map.setCenter(this.markerArray[0].getPosition());
-			this.map.setZoom(13);
-		}
+        MapUtil.markerMoveToCenter(this.map);
         google.maps.event.trigger(this.map, 'resize');
         return this;
 	},
-	
+
 	addressSearch : function() {
 		
 		var address = this.$el.find('.map_address_input').val();
@@ -749,14 +679,14 @@ var _S43latlngMapView = Backbone.View.extend({
     el : $('#latLng_tool'),
 	
 	events : {
-		"click #map_address_search_button" : "addressSearch",
-		"click #current_position_button" : "currentPosition"
+        "click .latlngAdd" : "latlngAdd",
+		"click .map_address_search_button" : "addressSearch",
+		"click .current_position_button" : "currentPosition"
 	},
 	
 	initialize : function() {
-		var mapDivId = 'latlng_canvas';
-		this.markerArray = new Array();
-		this.map = MapUtil.newMap(mapDivId);
+		var mapDivId = 'latLng_canvas';
+        this.map = MapUtil.newMap(mapDivId);
 		MapUtil.getCurrentPosition(this.map);
 		MapUtil.detectBrowser(mapDivId);
 		this.model.on('reset', this.render, this);
@@ -765,35 +695,75 @@ var _S43latlngMapView = Backbone.View.extend({
 	},
     
 	render : function() {
-		for (var ind in this.markerArray) {
-			// 既存マップをマーカーをクリア
-			this.markerArray[ind].setMap(null);
-		}
-		
+        MapUtil.clearAllMarker(this.map);
+        
 		var view = this;
-		
-		this.markerArray.length = 0;
-		
-		this.model.each(function(model1){
-			if (model1.get('latlng')) {
-				MapUtil.s43RoofMarkerMapByPos(view.map, 
-											  view.markerArray,
-											  model1.get(_id_key),
-											  model1.get('latlng'),
-											  model1.get('枝番号'),
-											  (model1.get('住所') + '<br/>' + model1.get('住所詳細')));
-			}
-		});
-		
-		// 最初目をマップの中央に表示
-		if (this.markerArray.length > 0) {
-			this.map.setCenter(this.markerArray[0].getPosition());
-			this.map.setZoom(13);
-		}
-        google.maps.event.trigger(this.map, 'resize');
+
+        this.geocoding();
         return this;
 	},
 	
+    
+    geocoding : function() {
+        var view = this;
+        
+	    // 転送住所取得成功時に実行されるハンドラ
+	    if (this.model.get('geocode_lat') && this.model.get('geocode_lng')) {
+            $('#latLng_tool_geocode_lat').val(this.model.get('geocode_lat'));
+			$('#latLng_tool_geocode_lng').val(this.model.get('geocode_lng'));
+            $('#latLng_tool_geocode_address').val(this.model.get('住所'));
+            
+	    	MapUtil.s43DragAbleMarkerMapByPos(this.map,
+                                              new google.maps.LatLng(this.model.get('geocode_lat'), this.model.get('geocode_lng')), 
+                                              this.markerDropStop);
+
+            // 最初目をマップの中央に表示
+            MapUtil.markerMoveToCenter(this.map);
+            google.maps.event.trigger(this.map, 'resize');
+            
+	    	return;
+	    } else {
+		    MapUtil.s43MarkerMapByAddress(this.map, this.model.get('住所'), function(results) {
+				$('#latLng_tool_geocode_lat').val(results[0].geometry.location.lat());
+				$('#latLng_tool_geocode_lng').val(results[0].geometry.location.lng());
+				//$('#latLng_tool_geocode_span_lat').text(results[0].geometry.location.lat());
+				//$('#latLng_tool_geocode_span_lng').text(results[0].geometry.location.lng());
+                $('#latLng_tool_geocode_address').val(results[0].formatted_address);
+                
+                // 最初目をマップの中央に表示
+                MapUtil.markerMoveToCenter(view.map);
+                google.maps.event.trigger(view.map, 'resize');
+        
+		    }, this.markerDropStop);
+	    }
+	},
+	
+    /** 住所から位置情報を取得 */
+    markerDropStop : function(pos, result) {
+    	$('#latLng_tool_geocode_lat').val(pos.lat());
+		$('#latLng_tool_geocode_lng').val(pos.lng());
+		//$('#latLng_tool_geocode_span_lat').text(pos.lat());
+		//$('#latLng_tool_geocode_span_lng').text(pos.lng());
+		$('#latLng_tool_geocode_address').val(result[0].formatted_address);
+	},
+    
+    /** 位置情報をさーばーに転送 */
+    latlngAdd : function() {
+        var view = this;
+		this.model.set('geocode_lat', $('#latLng_tool_geocode_lat').val());
+		this.model.set('geocode_lng', $('#latLng_tool_geocode_lng').val());
+		
+        this.$el.find('.latlngAdd').removeClass('btn-error').addClass('btn-info');
+        
+		this.model.save({},{
+            success: function(model, response, options) {
+                view.$el.find('.latlngAdd').removeClass('btn-info');
+	        },
+	        error: function(model, xhr, options) {
+                view.$el.find('.latlngAdd').removeClass('btn-info').addClass('btn-error');
+	        }});
+	},
+    
 	addressSearch : function() {
 		
 		var address = this.$el.find('.map_address_input').val();
@@ -815,7 +785,10 @@ var _S43latlngMapView = Backbone.View.extend({
 		MapUtil.getCurrentPosition(this.map);
 	},
     
-    open: function(model) {
+    open: function(id) {
+        var view = this;
+        // idを全体データーから取得
+        this.model = s43TabView.collection.get(id);
         this.$el.kendoWindow({
 			appendTo: "body",
             width: "430px",
@@ -825,7 +798,7 @@ var _S43latlngMapView = Backbone.View.extend({
             activate : function(ev) {
                 this.center();
                 this.maximize();
-                view.mapModeView.render();
+                view.render();
             },
             close : function(ev) {
             	//this.destroy();
@@ -836,4 +809,4 @@ var _S43latlngMapView = Backbone.View.extend({
     }
 });
 
-//var latlngTool = new _S43latlngMapView();
+var latlngTool = new _S43latlngMapView({model: new _S4Collection()});

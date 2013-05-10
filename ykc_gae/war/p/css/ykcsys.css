@@ -84,3 +84,7 @@ input {
     bottom : 20px;
     z-index: 10;
 }
+
+#latLng_tool_geocode_address {
+    width : 330px;
+}
